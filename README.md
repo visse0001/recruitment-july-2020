@@ -14,6 +14,11 @@ Create a virtual environment: <br/>
 To activate a venv: <br/>
 `source env/bin/activate`
 
+## Prettier JSON
+
+You can use this command below to make JSON easier to read: <br/>
+`python -m json.tool persons.json pretty_persons.json`
+
 ## Stack ToDo
 
 - Python
