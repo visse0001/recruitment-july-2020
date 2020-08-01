@@ -3,3 +3,4 @@ env
 __pycache__/
 db_sqla.py
 persons.db
+pretty_persons.json
