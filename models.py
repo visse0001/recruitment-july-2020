@@ -2,6 +2,8 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
+from parse_json import JSON_NAME, get_gender
+
 Base = declarative_base()
 
 
@@ -9,12 +11,10 @@ class Person(Base):
     __tablename__ = 'persons'
 
     id = Column('id', Integer, primary_key=True)
-    name = Column(String)
-    fullname = Column(String)
-    nickname = Column(String)
+    gender = Column(String)
 
     def __repr__(self):
-        return f'(id:{self.id}, name:{self.name}, fullname{self.fullname}, nickname{self.nickname}'
+        return f'(id:{self.id}, gender:{self.name}'
 
 
 engine = create_engine('sqlite:///persons.db', echo=True)
@@ -23,10 +23,8 @@ Session = sessionmaker(bind=engine)
 
 session = Session()
 person = Person()
-person.id = 0
-person.name = 'John'
-person.fullname = 'Doe'
-person.nickname = 'JDoe'
+
+person.gender = get_gender(JSON_NAME)
 
 session.add(person)
 session.commit()
