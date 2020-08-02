@@ -24,7 +24,6 @@ class Name(Base):
     id = Column('id', Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship("Person", back_populates="name")
-    # location = relationship("Location", uselist=False, back_populates="name")
     title = Column(String)
 
     def __repr__(self):
@@ -59,6 +58,7 @@ person.name = Name(title=get_title_nested_column_data(JSON_NAME))
 session.add(person)
 location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'), number=get_street_name_or_number(JSON_NAME, 'number'))
 session.add(location)
+
 
 session.commit()
 session.close()
