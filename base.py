@@ -62,8 +62,8 @@ street = Street()
 
 person.gender = get_not_nested_column_data(JSON_NAME, "gender")
 person.name = Name(title=get_title_nested_column_data(JSON_NAME))
-person.id = 4
-person.location = Location(person_id=4)
+person.id = 5
+person.location = Location(person_id=5)
 session.add(person)
 location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'),
                          number=get_street_name_or_number(JSON_NAME, 'number'), )
@@ -75,5 +75,10 @@ result = engine.execute("select * from person where id=4")
 row = result.fetchone()
 print(row)
 print(repr(row))
+result.close()
+
+result2 = engine.execute("select * from person")
+for row in result2:
+    print(row)
 
 session.close()
