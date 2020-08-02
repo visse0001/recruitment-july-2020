@@ -13,6 +13,7 @@ class Person(Base):
     id = Column('id', Integer, primary_key=True)
     name = relationship("Name", uselist=False, back_populates="person")
     gender = Column(String)
+    location = relationship("Location", uselist=False, back_populates="person")
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -29,10 +30,14 @@ class Name(Base):
     def __repr__(self):
         return f'(id:{self.id}, title:{self.title})'
 
+
 class Location(Base):
     __tablename__ = 'location'
     id = Column(Integer, primary_key=True)
     street = relationship("Street", uselist=False, back_populates="location")
+    person_id = Column(Integer, ForeignKey('person.id'))
+    person = relationship("Person", back_populates="location")
+
 
 class Street(Base):
     __tablename__ = 'street'
@@ -42,6 +47,8 @@ class Street(Base):
     name = Column(String)
     number = Column(Integer)
 
+    def __repr__(self):
+        return f'(id:{self.id}, name:{self.name}, number:{self.number})'
 
 
 engine = create_engine('sqlite:///persons.db', echo=True)
@@ -55,10 +62,12 @@ street = Street()
 
 person.gender = get_not_nested_column_data(JSON_NAME, "gender")
 person.name = Name(title=get_title_nested_column_data(JSON_NAME))
+person.id = 1
 session.add(person)
-location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'), number=get_street_name_or_number(JSON_NAME, 'number'))
+person.location = Location(person_id=1)
+location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'),
+                         number=get_street_name_or_number(JSON_NAME, 'number'), )
 session.add(location)
-
 
 session.commit()
 session.close()
