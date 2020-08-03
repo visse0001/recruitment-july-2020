@@ -108,3 +108,10 @@ for row in result_select:
     print(row)
 # SELECT user.id, user.gender, user.email
 # FROM user
+
+# select_stmt_or = select([user_table]).where(or_(user_table.c.gender="male", user_table.c.gender="female"))
+# res = conn.execute(select_stmt_or).fetchall()
+# print(res)
+
+# More selects 1h 18 min
+
