@@ -63,3 +63,7 @@ print(expression_mysql.compile(dialect=mysql.dialect()))
 expression_postgres = user_table.c.gender == 'ed'
 print(expression_postgres.compile(dialect=postgresql.dialect()))
 # "user".gender = %(gender_1)s
+
+compiled = expression_postgres.compile()
+print(compiled.params)
+# {'gender_1': 'ed'}
