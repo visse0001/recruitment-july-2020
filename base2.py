@@ -70,3 +70,29 @@ compiled_second = expression_postgres.compile().params
 print(compiled.params)
 print(compiled_second)
 # {'gender_1': 'ed'}
+
+print(expression_postgres.right)
+print(expression_postgres.left)
+# :gender_1
+# user.gender
+
+print(expression_postgres.operator)
+# <built-in function eq>
+
+print(expression_mysql.left)
+# user.gender
+
+engine.execute(
+    user_table.select().where(user_table.c.gender == 'female')
+)
+"""
+FROM user 
+WHERE user.gender = ?
+2020-08-03 13:57:47,974 INFO sqlalchemy.engine.base.Engine ('female',)
+"""
+
+# INSERT
+insert_stmt = user_table.insert().values(gender='male', email='john@doe.com')
+conn = engine.connect()
+result = conn.execute(insert_stmt)
+
