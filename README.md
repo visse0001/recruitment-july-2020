@@ -15,7 +15,7 @@ To activate a venv: <br/>
 [pip](https://pip.pypa.io/en/stable/installing/) <br>
 [SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
 
-Install dependencies from requirements.txt: <br>
+To install dependencies from requirements.txt: <br>
 `pip install -r requirements.txt`
 
 ## Prettier JSON
