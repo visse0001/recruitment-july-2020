@@ -55,3 +55,17 @@ from sqlalchemy import select
 sel = select([User.name, User.fullname]).where(User.name == 'ed').order_by(User.id)
 result = session.connection().execute(sel).fetchall()
 print(result)
+
+query_two = session.query(User).filter(User.name == 'ed').order_by(User.id)
+print(query_two.all())
+# result: [<User('ed', 'Edward Jones')>, <User('ed', 'Edward Jones')>, <User('ed', 'Edward Jones')>]
+
+for name, fullname in session.query(User.name, User.fullname):
+    print(name, fullname)
+"""
+result:
+ed Edward Jones
+wendy Wendy Weather
+mary Mary Con
+fred Fred Flin
+"""
