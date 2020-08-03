@@ -91,3 +91,25 @@ result:
 <User('wendy', 'Wendy Weather')>
 <User('mary', 'Mary Con')>
 """
+
+for name, in session.query(User.name).filter_by(fullname='Edward Jones'):
+    print(name)
+
+from sqlalchemy import or_
+
+for name, in session.query(User.name).filter(or_(User.fullname == "Edward Jones", User.id < 5)):
+    print(name)
+
+for user in session.query(User).filter(User.name == 'ed').filter(User.fullname == 'Edward Jones'):
+    print(user)
+
+# error
+# query_tree = session.query(User).filter_by(fullname='nonexistent')
+# query_tree.one()
+
+q = session.query(User.fullname)
+q.all()
+print(q)
+
+q2 = q.filter(or_(User.name == 'mary', User.name == 'ed'))
+print(q2[1])
