@@ -71,15 +71,14 @@ location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'),
                          location_id=1)
 session.add(location)
 
+
+result = session.query(Street) \
+    .filter(Street.id == 1) \
+    .update({'name': 'grunwaldzka'})
+
 session.commit()
 
-result = engine.execute("select * from person where id=1")
-row = result.fetchone()
-print(row)
-print(repr(row))
-result.close()
-
-result2 = engine.execute("select * from person")
+result2 = engine.execute("select * from street")
 for row in result2:
     print(row)
 
