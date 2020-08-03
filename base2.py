@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy import select
 from sqlalchemy import MetaData
 from sqlalchemy import Table, Column, Integer, ForeignKey, String
 from sqlalchemy import engine, inspect
@@ -49,7 +49,6 @@ print(table_names)
 columns = inspector.get_columns('street')
 print(columns)
 
-
 print(user_table.c.id + 5)
 # "user".id + :id_1
 
@@ -96,3 +95,9 @@ insert_stmt = user_table.insert().values(gender='male', email='john@doe.com')
 conn = engine.connect()
 result = conn.execute(insert_stmt)
 
+# SELECT
+select_stmt = select([user_table.c.gender, user_table.c.email]). \
+    where(user_table.c.gender == 'male')
+result_select = conn.execute(select_stmt)
+for row in result_select:
+    print(row)
