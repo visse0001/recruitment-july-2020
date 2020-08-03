@@ -72,14 +72,31 @@ location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'),
 session.add(location)
 
 
-result = session.query(Street) \
-    .filter(Street.id == 1) \
-    .update({'name': 'grunwaldzka'})
+# result = session.query(Street) \
+#     .filter(Street.id == 1) \
+#     .update({'name': 'grunwaldzka'})
 
 session.commit()
 
-result2 = engine.execute("select * from street")
-for row in result2:
-    print(row)
+# Implicit JOIN
+# query = session.query(Person, Name).filter(Person.id == Name.person_id).all()
+# print(query)
+
+# JOIN to use the relationship()-bound
+# query2 = session.query(Person, Name).join(Person.name).all()
+# print(query2)
+
+# either Person and Name may be reffered to anyway in the query
+# query3 = session.query(Person, Name).join(Person.name).filter(Name.title == 'Miss').first()
+# print(query3)
+
+# we can specify an explicit FROM using select_from()
+query4 = session.query(Person, Name).select_from(Name).join(Name.person).all()
+print(query4)
+
+
+# result2 = engine.execute("select * from street")
+# for row in result2:
+#     print(row)
 
 session.close()
