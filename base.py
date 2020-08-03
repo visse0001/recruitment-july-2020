@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Unicode, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from parse_json import JSON_NAME, get_not_nested_column_data, get_title_nested_column_data, get_street_name_or_number
+from parse_json import JSON_NAME, get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data
 
 Base = declarative_base()
 
@@ -60,26 +60,31 @@ person = Person()
 location = Location()
 street = Street()
 
-person.gender = get_not_nested_column_data(JSON_NAME, "gender")
-person.name = Name(title=get_title_nested_column_data(JSON_NAME))
+# To INSERT data into tables
+person.gender = get_not_nested_table_data(JSON_NAME, 0, "gender")
+person.name = Name(title=get_double_nested_table_data(JSON_NAME, 0, "name", "title"))
 person.id = 1
 person.location = Location(person_id=1)
-session.add(person)
 
-location.street = Street(name=get_street_name_or_number(JSON_NAME, 'name'),
-                         number=get_street_name_or_number(JSON_NAME, 'number'),
+location.street = Street(name=get_triple_nested_table_data(JSON_NAME, 0, 'location', 'street', 'name'),
+                         number=get_triple_nested_table_data(JSON_NAME, 0, 'location', 'street', 'number'),
                          location_id=1)
+
+# To add data
+session.add(person)
 session.add(location)
-
-
-result = session.query(Street) \
-    .filter(Street.id == 1) \
-    .update({'name': 'grunwaldzka'})
 
 session.commit()
 
-result2 = engine.execute("select * from street")
-for row in result2:
-    print(row)
+# To print a result
+# result = session.query(Street) \
+#     .filter(Street.id == 1) \
+#     .update({'name': 'grunwaldzka'})
+# print(result)
+
+
+# result2 = engine.execute("select * from street")
+# for row in result2:
+#     print(row)
 
 session.close()
