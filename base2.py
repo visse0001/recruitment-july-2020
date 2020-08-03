@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import MetaData
 from sqlalchemy import Table, Column, Integer, ForeignKey, String
 from sqlalchemy import engine, inspect
-from sqlalchemy.dialects import mysql
+from sqlalchemy.dialects import mysql, postgresql
 
 Base = declarative_base()
 
@@ -56,6 +56,10 @@ print(user_table.c.id + 5)
 print(user_table.c.gender + "same name")
 # "user".gender || :gender_1
 
-expression = user_table.c.gender == 'ed'
-print(expression.compile(dialect=mysql.dialect()))
+expression_mysql = user_table.c.gender == 'ed'
+print(expression_mysql.compile(dialect=mysql.dialect()))
 # user.gender = %s
+
+expression_postgres = user_table.c.gender == 'ed'
+print(expression_postgres.compile(dialect=postgresql.dialect()))
+# "user".gender = %(gender_1)s
