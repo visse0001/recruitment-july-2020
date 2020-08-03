@@ -61,13 +61,13 @@ location = Location()
 street = Street()
 
 # To INSERT data into tables
-person.gender = get_not_nested_table_data(JSON_NAME, 0, "gender")
-person.name = Name(title=get_double_nested_table_data(JSON_NAME, 0, "name", "title"))
+person.gender = get_not_nested_table_data(0, "gender")
+person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
 person.id = 1
 person.location = Location(person_id=1)
 
-location.street = Street(name=get_triple_nested_table_data(JSON_NAME, 0, 'location', 'street', 'name'),
-                         number=get_triple_nested_table_data(JSON_NAME, 0, 'location', 'street', 'number'),
+location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
+                         number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
                          location_id=1)
 
 # To add data
