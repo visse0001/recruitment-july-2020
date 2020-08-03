@@ -79,3 +79,7 @@ result:
 <User('mary', 'Mary Con')> mary
 <User('fred', 'Fred Flin')> fred
 """
+
+u = session.query(User).order_by(User.id)[2]
+print(u)
+# result: <User('mary', 'Mary Con')>
