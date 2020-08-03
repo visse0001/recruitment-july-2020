@@ -65,5 +65,8 @@ print(expression_postgres.compile(dialect=postgresql.dialect()))
 # "user".gender = %(gender_1)s
 
 compiled = expression_postgres.compile()
+# OR
+compiled_second = expression_postgres.compile().params
 print(compiled.params)
+print(compiled_second)
 # {'gender_1': 'ed'}
