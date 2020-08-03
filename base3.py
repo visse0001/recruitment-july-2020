@@ -83,3 +83,11 @@ result:
 u = session.query(User).order_by(User.id)[2]
 print(u)
 # result: <User('mary', 'Mary Con')>
+
+for u in session.query(User).order_by(User.id)[1:3]:
+    print(u)
+"""
+result:
+<User('wendy', 'Wendy Weather')>
+<User('mary', 'Mary Con')>
+"""
