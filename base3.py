@@ -69,3 +69,13 @@ wendy Wendy Weather
 mary Mary Con
 fred Fred Flin
 """
+
+for row in session.query(User, User.name):
+    print(row.User, row.name)
+"""
+result:
+<User('ed', 'Edward Jones')> ed
+<User('wendy', 'Wendy Weather')> wendy
+<User('mary', 'Mary Con')> mary
+<User('fred', 'Fred Flin')> fred
+"""
