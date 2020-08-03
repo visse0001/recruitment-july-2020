@@ -23,11 +23,9 @@ engine = create_engine('sqlite:///base4.db', echo=True)
 Base.metadata.create_all(bind=engine)
 session = Session(bind=engine)
 
-
 session.add_all([
     Network(name='net1'),
     Network(name='net2')
 ])
 
 session.flush()
-
