@@ -101,3 +101,10 @@ select_stmt = select([user_table.c.gender, user_table.c.email]). \
 result_select = conn.execute(select_stmt)
 for row in result_select:
     print(row)
+
+select_stmt_table = select([user_table])
+result_select_stmt_table = conn.execute(select_stmt_table)
+for row in result_select:
+    print(row)
+# SELECT user.id, user.gender, user.email
+# FROM user
