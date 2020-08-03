@@ -10,7 +10,7 @@ class Network(Base):
     __tablename__ = 'network'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+    name = Column(String(100), nullable=False)
 
     def __repr__(self):
         return f'Name: {self.name}'
@@ -29,5 +29,5 @@ session.add_all([
     Network(name='net2')
 ])
 
-session.commit()
+session.flush()
 
