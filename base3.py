@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-
 Base = declarative_base()
+
 
 class User(Base):
     __tablename__ = 'user'
@@ -17,6 +17,7 @@ class User(Base):
         return "<User(%r, %r)>" % (
             self.name, self.fullname
         )
+
 
 ed_user = User(name="ed", fullname="Edward Jones")
 
@@ -48,3 +49,9 @@ if fake_user in session:
     print("True")
 else:
     print("False")
+
+from sqlalchemy import select
+
+sel = select([User.name, User.fullname]).where(User.name == 'ed').order_by(User.id)
+result = session.connection().execute(sel).fetchall()
+print(result)
