@@ -1,11 +1,7 @@
 # The script created for recruitment to Profil Software
 
-[Link to task](https://git.profil-software.com/recruitment-july-2020/backend)
+Link to the [task](https://git.profil-software.com/recruitment-july-2020/backend).
 
-## Dependencies
-[Python 3.7](https://www.python.org/downloads/) <br>
-[pip](https://pip.pypa.io/en/stable/installing/) <br>
-[SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
 
 ### Virtual Enviroment
 Create a virtual environment: <br/>
@@ -14,20 +10,15 @@ Create a virtual environment: <br/>
 To activate a venv: <br/>
 `source env/bin/activate`
 
+## Dependencies
+[Python 3.7](https://www.python.org/downloads/) <br>
+[pip](https://pip.pypa.io/en/stable/installing/) <br>
+[SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
+
+Install dependencies from requirements.txt: <br>
+`pip install -r requirements.txt`
+
 ## Prettier JSON
 
 You can use this command below to make JSON easier to read: <br/>
 `python -m json.tool persons.json pretty_persons.json`
-
-## Stack ToDo
-
-- Python
-- SQLite
-- GitHub
-- Pytest
-
-## Personal goals
-
-- Learning Pytest
-- Use argparse
-- Try to use [API](https://randomuser.me/)
