@@ -71,3 +71,8 @@ def delete_zero_from_str_if_first(a_string):
     if a_string[0] == 0:
         a_string = int(a_string[1])
     return a_string
+
+def count_indexes():
+    result = get_json_dict(JSON_NAME)
+    obj = result['results']
+    return len(obj)
