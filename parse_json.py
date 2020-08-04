@@ -99,6 +99,17 @@ def get_double_nested_table_data_from_all_indexes(first_table: str, second_table
         results_list.append(str_obj)
     return results_list
 
+def get_triple_nested_table_data_from_all_indexes(first_table: str, second_table: str, third_table: str):
+    result = get_json_dict(JSON_NAME)
+    results_list = []
+    index = 0
+    for element in range(count_indexes()):
+        obj = result['results'][index][first_table][second_table][third_table]
+        index += 1
+        str_obj = str(obj)
+        results_list.append(str_obj)
+    return results_list
+
 def list_wihout_spec_char(seq: list):
     new_list = []
     for element in seq:
@@ -117,5 +128,5 @@ all_cells = list_wihout_spec_char(all_cells)
 all_nat = get_not_nested_table_data_from_all_indexes("nat")
 
 all_name_title = get_double_nested_table_data_from_all_indexes("name", "title")
-print(all_name_title)
+print(all_phones)
 

@@ -6,7 +6,8 @@ import sqlite3
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, get_triple_nested_table_data_from_all_indexes
+    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, \
+    get_triple_nested_table_data_from_all_indexes
 
 Base = declarative_base()
 
@@ -185,41 +186,44 @@ all_location_street_numbers = get_triple_nested_table_data_from_all_indexes("loc
 all_location_street_names = get_triple_nested_table_data_from_all_indexes("location", "street", "name")
 
 
-
 def bulk_save_persons():
     index = 0
     persons = []
     for element in range(count_indexes()):
-        person = Person(gender=all_genders[index], email=all_emails[index], phone=all_phone[index], cell=all_cell[index], nat=all_nat[index])
+        person = Person(gender=all_genders[index], email=all_emails[index], phone=all_phone[index],
+                        cell=all_cell[index], nat=all_nat[index])
         persons.append(person)
         index += 1
 
     session.add_all(persons)
     session.commit()
 
+
 def bulk_save_name():
     index = 0
     names = []
     for element in range(count_indexes()):
-        name = Name(title=all_name_titles[index], person_id=index+1, first=all_name_firsts[index], last=all_name_lasts[index])
+        name = Name(title=all_name_titles[index], person_id=index + 1, first=all_name_firsts[index],
+                    last=all_name_lasts[index])
         names.append(name)
         index += 1
 
     session.add_all(names)
     session.commit()
 
-# bulk save for triple nested table location
 
 def bulk_save_street():
     index = 0
     streets = []
     for element in range(count_indexes()):
-        street = Street(name=all_location_street_names[index], number=all_location_street_numbers[index], location_id=index+1)
+        street = Street(name=all_location_street_names[index], number=all_location_street_numbers[index],
+                        location_id=index + 1)
         streets.append(street)
         index += 1
 
     session.add_all(streets)
     session.commit()
+
 
 bulk_save_persons()
 bulk_save_name()
