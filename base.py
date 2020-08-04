@@ -171,18 +171,19 @@ all_genders = get_not_nested_table_data_from_all_indexes("gender")
 all_emails = get_not_nested_table_data_from_all_indexes("email")
 
 
-def populate_data_using_sqlite_query():
-    conn = sqlite3.connect('persons.db')
-    c = conn.cursor()
-    for i in range(count_indexes()):
-        gend = all_genders[i]
-        email = all_emails[i]
-        params = (i, gend, email)
-        c.execute("INSERT INTO person (id, gender, email) VALUES (?,?, ?)", params)
-    conn.commit()
+def bulk_save_persons():
+    index = 0
+    persons = []
+    for element in range(count_indexes()):
+        person = Person(gender=all_genders[index], email=all_emails[index])
+        persons.append(person)
+        index += 1
+
+    session.add_all(persons)
+    session.commit()
 
 
-populate_data_using_sqlite_query()
+bulk_save_persons()
 
 session.commit()
 
