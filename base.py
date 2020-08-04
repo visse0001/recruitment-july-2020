@@ -3,7 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
-    remove_special_characters_from_string, get_days_until_birthday
+    remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
+    count_indexes
 
 Base = declarative_base()
 
@@ -164,63 +165,38 @@ dob = Dob()
 login = Login()
 id_person = IdPerson()
 
-# function from stackoverflow
-# foos = [Foo(bar='a',), Foo(bar='b'), Foo(bar='c')]
-# session.bulk_save_objects(foos, return_defaults=True)
-# for foo in foos:
-#     assert foo.id is not None
-# session.commit()
+all_genders = get_not_nested_table_data_from_all_indexes("gender")
+all_emails = get_not_nested_table_data_from_all_indexes("email")
 
-# my notes
-person_index_0 = get_not_nested_table_data(0, "gender")
-person_index_1 = get_not_nested_table_data(1, "gender")
-persons_gender = [Person(gender=person_index_0), Person(gender=person_index_1)]
-session.bulk_save_objects(persons_gender, return_defaults=True)
-for gender in persons_gender:
-    assert gender.id is not None
-session.commit()
+def bulk_save_obj_gender():
+    index = 0
+    persons_gender = []
+    for element in range(count_indexes()):
+        per = Person(gender=all_genders[index])
+        persons_gender.append(per)
+        index += 1
+
+    session.bulk_save_objects(persons_gender, return_defaults=True)
+    for gender in persons_gender:
+        assert gender.id is not None
+    session.commit()
+
+def bulk_save_obj_email():
+    index = 0
+    persons_emails = []
+    for element in range(count_indexes()):
+        per = Person(email=all_emails[index])
+        persons_emails.append(per)
+        index += 1
+
+    session.bulk_save_objects(persons_emails, return_defaults=True)
+    for email in persons_emails:
+        assert email.id is not None
+    session.commit()
 
 
-person.gender = get_not_nested_table_data(0, "gender")
-person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
-person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
-person.cell = remove_special_characters_from_string(get_not_nested_table_data(0, "cell"))
-person.email = get_not_nested_table_data(0, "email")
-person.nat = get_not_nested_table_data(0, "nat")
-person.location = Location(person_id=1)
-person.login = Login(uuid=get_double_nested_table_data(0, 'login', 'uuid'),
-                     username=get_double_nested_table_data(0, 'login', 'username'),
-                     password=get_double_nested_table_data(0, 'login', 'password'),
-                     salt=get_double_nested_table_data(0, 'login', 'salt'),
-                     md5=get_double_nested_table_data(0, 'login', 'md5'),
-                     sha1=get_double_nested_table_data(0, 'login', 'sha1'),
-                     sha256=get_double_nested_table_data(0, 'login', 'sha256'),
-                     person_id=1)
-
-person.registered = Registered(date=get_double_nested_table_data(0, "registered", "date"),
-                               age=get_double_nested_table_data(0, "registered", "age"),
-                               )
-person.id_person = IdPerson(name=get_double_nested_table_data(0, "id", "name"),
-                            value=get_double_nested_table_data(0, "id", "value"),
-                            person_id=1
-                            )
-
-location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
-                         number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
-                         location_id=1)
-
-location.coordinates = Coordinates(latitude=get_triple_nested_table_data(0, "location", "coordinates", "latitude"),
-                                   longitude=get_triple_nested_table_data(0, "location", "coordinates", "longitude"),
-                                   location_id=1)
-
-location.timezone = Timezone(offset=get_triple_nested_table_data(0, "location", "timezone", "offset"),
-                             description=get_triple_nested_table_data(0, "location", "timezone", "description"),
-                             location_id=1)
-
-dob.date = get_double_nested_table_data(0, "dob", "date")
-dob.age = get_double_nested_table_data(0, "dob", "age")
-dob.days_until_birth = get_days_until_birthday(0, "dob", "date")
-dob.person_id = 1
+bulk_save_obj_gender()
+bulk_save_obj_email()
 
 session.add(person)
 session.add(location)
