@@ -2,6 +2,8 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
+import sqlite3
+
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
     count_indexes
@@ -168,39 +170,19 @@ id_person = IdPerson()
 all_genders = get_not_nested_table_data_from_all_indexes("gender")
 all_emails = get_not_nested_table_data_from_all_indexes("email")
 
-def bulk_save_obj_gender():
-    index = 0
-    persons_gender = []
-    for element in range(count_indexes()):
-        per = Person(gender=all_genders[index])
-        persons_gender.append(per)
-        index += 1
 
-    session.bulk_save_objects(persons_gender, return_defaults=True)
-    for gender in persons_gender:
-        assert gender.id is not None
-    session.commit()
-
-def bulk_save_obj_email():
-    index = 0
-    persons_emails = []
-    for element in range(count_indexes()):
-        per = Person(email=all_emails[index])
-        persons_emails.append(per)
-        index += 1
-
-    session.bulk_save_objects(persons_emails, return_defaults=True)
-    for email in persons_emails:
-        assert email.id is not None
-    session.commit()
+def populate_data_using_sqlite_query():
+    conn = sqlite3.connect('persons.db')
+    c = conn.cursor()
+    for i in range(count_indexes()):
+        gend = all_genders[i]
+        email = all_emails[i]
+        params = (i, gend, email)
+        c.execute("INSERT INTO person (id, gender, email) VALUES (?,?, ?)", params)
+    conn.commit()
 
 
-bulk_save_obj_gender()
-bulk_save_obj_email()
-
-session.add(person)
-session.add(location)
-session.add(dob)
+populate_data_using_sqlite_query()
 
 session.commit()
 
