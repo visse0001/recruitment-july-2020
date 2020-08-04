@@ -6,7 +6,7 @@ import sqlite3
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_indexes
+    count_indexes, list_wihout_spec_char
 
 Base = declarative_base()
 
@@ -169,13 +169,19 @@ id_person = IdPerson()
 
 all_genders = get_not_nested_table_data_from_all_indexes("gender")
 all_emails = get_not_nested_table_data_from_all_indexes("email")
+all_phone_with_spec_char = get_not_nested_table_data_from_all_indexes("phone")
+all_phone = list_wihout_spec_char(all_phone_with_spec_char)
+all_cell_with_spec_char = get_not_nested_table_data_from_all_indexes("cell")
+all_cell = list_wihout_spec_char(all_cell_with_spec_char)
+all_nat = get_not_nested_table_data_from_all_indexes("nat")
+
 
 
 def bulk_save_persons():
     index = 0
     persons = []
     for element in range(count_indexes()):
-        person = Person(gender=all_genders[index], email=all_emails[index])
+        person = Person(gender=all_genders[index], email=all_emails[index], phone=all_phone[index], cell=all_cell[index], nat=all_nat[index])
         persons.append(person)
         index += 1
 
