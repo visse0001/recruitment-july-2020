@@ -6,7 +6,7 @@ import sqlite3
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes
+    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, get_triple_nested_table_data_from_all_indexes
 
 Base = declarative_base()
 
@@ -181,6 +181,9 @@ all_name_titles = get_double_nested_table_data_from_all_indexes("name", "title")
 all_name_firsts = get_double_nested_table_data_from_all_indexes("name", "first")
 all_name_lasts = get_double_nested_table_data_from_all_indexes("name", "last")
 
+all_location_street_numbers = get_triple_nested_table_data_from_all_indexes("location", "street", "number")
+all_location_street_names = get_triple_nested_table_data_from_all_indexes("location", "street", "name")
+
 
 
 def bulk_save_persons():
@@ -205,8 +208,22 @@ def bulk_save_name():
     session.add_all(names)
     session.commit()
 
+# bulk save for triple nested table location
+
+def bulk_save_street():
+    index = 0
+    streets = []
+    for element in range(count_indexes()):
+        street = Street(name=all_location_street_names[index], number=all_location_street_numbers[index], location_id=index+1)
+        streets.append(street)
+        index += 1
+
+    session.add_all(streets)
+    session.commit()
+
 bulk_save_persons()
 bulk_save_name()
+bulk_save_street()
 
 session.commit()
 
