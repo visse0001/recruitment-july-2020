@@ -36,6 +36,7 @@ class Name(Base):
     def __repr__(self):
         return f'(id:{self.id}, title:{self.title})'
 
+
 class Login(Base):
     __tablename__ = 'login'
 
@@ -105,6 +106,22 @@ class Dob(Base):
     age = Column(Integer)
     days_until_birth = Column(Integer)
 
+    def __repr__(self):
+        return f'(id:{self.id}, date:{self.date}, age:{self.age}, days_until_birth:{self.days_until_birth})'
+
+
+class Registered(Base):
+    __tablename__ = 'registered'
+
+    id = Column(Integer, primary_key=True)
+    person_id = Column(Integer, ForeignKey('person.id'))
+    person = relationship("Person", back_populates="dob")
+    date = Column(String)
+    age = Column(Integer)
+
+    def __repr__(self):
+        return f'(id:{self.id}, date:{self.date}, age:{self.age})'
+
 
 class Street(Base):
     __tablename__ = 'street'
@@ -156,7 +173,6 @@ location.coordinates = Coordinates(latitude=get_triple_nested_table_data(0, "loc
 location.timezone = Timezone(offset=get_triple_nested_table_data(0, "location", "timezone", "offset"),
                              description=get_triple_nested_table_data(0, "location", "timezone", "description"),
                              location_id=1)
-
 
 dob.date = get_double_nested_table_data(0, "dob", "date")
 dob.age = get_double_nested_table_data(0, "dob", "age")
