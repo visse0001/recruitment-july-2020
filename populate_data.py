@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
-    remove_special_characters_from_string, get_days_until_birthday
+    remove_special_characters_from_string, get_days_until_birthday, count_indexes, get_json_dict, JSON_NAME
 
 Base = declarative_base()
 
@@ -171,6 +171,29 @@ session.bulk_save_objects(persons_gender, return_defaults=True)
 for gender in persons_gender:
     assert gender.id is not None
 session.commit()
+
+# create loop for bulk save object not nested
+# create function - count number of index in json in parse_json.py DONE
+
+def get_not_nested_table_data_all_indexes(table_name: str):
+    result = get_json_dict(JSON_NAME)
+    # index +1
+    # update list
+    results_list = []
+    index = 0
+    for element in range(count_indexes()):
+        obj = result['results'][index][table_name]
+        results_list.append = obj
+    return results_list
+
+list_all_index = get_not_nested_table_data_all_indexes("gender")
+print(list_all_index)
+
+
+
+
+
+
 
 person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))

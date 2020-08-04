@@ -83,7 +83,6 @@ def get_not_nested_table_data_all_indexes(table_name: str):
     index = 0
     for element in range(count_indexes()):
         obj = result['results'][index][table_name]
-        # results_list.append = obj
         index += 1
         str_obj = str(obj)
         results_list.append(str_obj)
