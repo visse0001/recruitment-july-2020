@@ -3,7 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
-    remove_special_characters_from_string, get_days_until_birthday, count_indexes, get_json_dict, JSON_NAME
+    remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
+    count_indexes, get_json_dict, JSON_NAME
 
 Base = declarative_base()
 
@@ -164,36 +165,34 @@ dob = Dob()
 login = Login()
 id_person = IdPerson()
 
-person_index_0 = get_not_nested_table_data(0, "gender")
-person_index_1 = get_not_nested_table_data(1, "gender")
-persons_gender = [Person(gender=person_index_0), Person(gender=person_index_1)]
-session.bulk_save_objects(persons_gender, return_defaults=True)
-for gender in persons_gender:
-    assert gender.id is not None
-session.commit()
+# have a genders list and get element by element - maybe loop
+# person_index_0 = get_not_nested_table_data(0, "gender")
+# person_index_1 = get_not_nested_table_data(1, "gender")
 
-# create loop for bulk save object not nested
-# create function - count number of index in json in parse_json.py DONE
+all_genders = get_not_nested_table_data_from_all_indexes("gender")
 
-def get_not_nested_table_data_all_indexes(table_name: str):
-    result = get_json_dict(JSON_NAME)
-    # index +1
-    # update list
-    results_list = []
+
+# persons_gender = [Person(gender=all_genders[0]), Person(gender=all_genders[1])]
+# session.bulk_save_objects(persons_gender, return_defaults=True)
+# for gender in persons_gender:
+#     assert gender.id is not None
+# session.commit()
+
+def bulk_save_obj_gender():
     index = 0
+    persons_gender = []
     for element in range(count_indexes()):
-        obj = result['results'][index][table_name]
-        results_list.append = obj
-    return results_list
+        per = Person(gender=all_genders[index])
+        persons_gender.append(per)
+        index += 1
 
-list_all_index = get_not_nested_table_data_all_indexes("gender")
-print(list_all_index)
-
-
-
-
+    session.bulk_save_objects(persons_gender, return_defaults=True)
+    for gender in persons_gender:
+        assert gender.id is not None
+    session.commit()
 
 
+bulk_save_obj_gender()
 
 person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
