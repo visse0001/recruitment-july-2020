@@ -40,6 +40,34 @@ class Name(Base):
         return f'(id:{self.id}, title:{self.title})'
 
 
+class Location(Base):
+    __tablename__ = 'location'
+
+    id = Column(Integer, primary_key=True)
+    street = relationship("Street", uselist=False, back_populates="location")
+    coordinates = relationship("Coordinates", uselist=False, back_populates="location")
+    timezone = relationship("Timezone", uselist=False, back_populates="location")
+    person_id = Column(Integer, ForeignKey('person.id'))
+    person = relationship("Person", back_populates="location")
+    city = Column(String)
+    state = Column(String)
+    country = Column(String)
+    postcode = Column(Integer)
+
+
+class Street(Base):
+    __tablename__ = 'street'
+
+    id = Column(Integer, primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    location = relationship("Location", back_populates="street")
+    name = Column(String)
+    number = Column(Integer)
+
+    def __repr__(self):
+        return f'(id:{self.id}, name:{self.name}, number:{self.number})'
+
+
 class Login(Base):
     __tablename__ = 'login'
 
@@ -56,21 +84,6 @@ class Login(Base):
 
     def __repr__(self):
         return f'(id:{self.id}, username:{self.username})'
-
-
-class Location(Base):
-    __tablename__ = 'location'
-
-    id = Column(Integer, primary_key=True)
-    street = relationship("Street", uselist=False, back_populates="location")
-    coordinates = relationship("Coordinates", uselist=False, back_populates="location")
-    timezone = relationship("Timezone", uselist=False, back_populates="location")
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship("Person", back_populates="location")
-    city = Column(String)
-    state = Column(String)
-    country = Column(String)
-    postcode = Column(Integer)
 
 
 class Coordinates(Base):
@@ -139,19 +152,6 @@ class IdPerson(Base):
         return f'(id:{self.id_person}, name:{self.name}, value:{self.value})'
 
 
-class Street(Base):
-    __tablename__ = 'street'
-
-    id = Column(Integer, primary_key=True)
-    location_id = Column(Integer, ForeignKey('location.id'))
-    location = relationship("Location", back_populates="street")
-    name = Column(String)
-    number = Column(Integer)
-
-    def __repr__(self):
-        return f'(id:{self.id}, name:{self.name}, number:{self.number})'
-
-
 engine = create_engine('sqlite:///persons.db', echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
@@ -168,7 +168,7 @@ person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
 person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
 person.cell = remove_special_characters_from_string(get_not_nested_table_data(0, "cell"))
-person.id = 1
+person.email = get_not_nested_table_data(0, "email")
 person.nat = get_not_nested_table_data(0, "nat")
 person.location = Location(person_id=1)
 person.login = Login(uuid=get_double_nested_table_data(0, 'login', 'uuid'),
