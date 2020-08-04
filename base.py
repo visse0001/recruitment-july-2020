@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, Unicode, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from parse_json import JSON_NAME, get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
+from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday
 
 Base = declarative_base()
