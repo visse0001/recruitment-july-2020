@@ -20,6 +20,7 @@ class Person(Base):
     dob = relationship("Dob", uselist=False, back_populates="person")
     email = Column(String)
     login = relationship("Login", uselist=False, back_populates="person")
+    registered = relationship("Registered", uselist=False, back_populates="person")
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -115,7 +116,7 @@ class Registered(Base):
 
     id = Column(Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship("Person", back_populates="dob")
+    person = relationship("Person", back_populates="registered")
     date = Column(String)
     age = Column(Integer)
 
@@ -161,6 +162,10 @@ person.login = Login(uuid=get_double_nested_table_data(0, 'login', 'uuid'),
                      sha1=get_double_nested_table_data(0, 'login', 'sha1'),
                      sha256=get_double_nested_table_data(0, 'login', 'sha256'),
                      person_id=1)
+
+person.registered = Registered(date=get_double_nested_table_data(0, "registered", "date"),
+                               age=get_double_nested_table_data(0, "registered", "age"),
+                               )
 
 location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
                          number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
