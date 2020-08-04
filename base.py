@@ -21,6 +21,7 @@ class Person(Base):
     email = Column(String)
     login = relationship("Login", uselist=False, back_populates="person")
     registered = relationship("Registered", uselist=False, back_populates="person")
+    id_person = relationship("IdPerson", uselist=False, back_populates="person")
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -124,6 +125,19 @@ class Registered(Base):
         return f'(id:{self.id}, date:{self.date}, age:{self.age})'
 
 
+class IdPerson(Base):
+    __tablename__ = 'id_person'
+
+    id = Column(Integer, primary_key=True)
+    person_id = Column(Integer, ForeignKey('person.id'))
+    person = relationship("Person", back_populates="id_person")
+    name = Column(String)
+    value = Column(String)
+
+    def __repr__(self):
+        return f'(id:{self.id}, name:{self.name}, value:{self.value})'
+
+
 class Street(Base):
     __tablename__ = 'street'
 
@@ -166,6 +180,9 @@ person.login = Login(uuid=get_double_nested_table_data(0, 'login', 'uuid'),
 person.registered = Registered(date=get_double_nested_table_data(0, "registered", "date"),
                                age=get_double_nested_table_data(0, "registered", "age"),
                                )
+person.id_person = IdPerson(name=get_double_nested_table_data(0, "id", "name"),
+                           value=get_double_nested_table_data(0, "id", "value"),
+                           )
 
 location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
                          number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
