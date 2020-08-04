@@ -12,15 +12,15 @@ class Person(Base):
     __tablename__ = 'person'
 
     id = Column('id', Integer, primary_key=True)
-    name = relationship("Name", uselist=False, back_populates="person")
     gender = Column(String)
+    name = relationship("Name", uselist=False, back_populates="person")
     location = relationship("Location", uselist=False, back_populates="person")
-    phone = Column(String)
-    cell = Column(String)
-    dob = relationship("Dob", uselist=False, back_populates="person")
     email = Column(String)
     login = relationship("Login", uselist=False, back_populates="person")
+    dob = relationship("Dob", uselist=False, back_populates="person")
     registered = relationship("Registered", uselist=False, back_populates="person")
+    phone = Column(String)
+    cell = Column(String)
     id_person = relationship("IdPerson", uselist=False, back_populates="person")
     nat = Column(String)
 
@@ -161,8 +161,9 @@ person = Person()
 location = Location()
 street = Street()
 dob = Dob()
+login = Login()
+id_person = IdPerson()
 
-# To INSERT data into tables
 person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
 person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
@@ -203,22 +204,11 @@ dob.age = get_double_nested_table_data(0, "dob", "age")
 dob.days_until_birth = get_days_until_birthday(0, "dob", "date")
 dob.person_id = 1
 
-# To add data
 session.add(person)
 session.add(location)
 session.add(dob)
 
 session.commit()
 
-# To print a result
-# result = session.query(Street) \
-#     .filter(Street.id == 1) \
-#     .update({'name': 'grunwaldzka'})
-# print(result)
-
-
-# result2 = engine.execute("select * from person")
-# for row in result2:
-#     print(row)
 
 session.close()
