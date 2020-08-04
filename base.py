@@ -129,14 +129,14 @@ class Registered(Base):
 class IdPerson(Base):
     __tablename__ = 'id_person'
 
-    id = Column(Integer, primary_key=True)
+    id_person = Column(Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship("Person", back_populates="id_person")
     name = Column(String)
     value = Column(String)
 
     def __repr__(self):
-        return f'(id:{self.id}, name:{self.name}, value:{self.value})'
+        return f'(id:{self.id_person}, name:{self.name}, value:{self.value})'
 
 
 class Street(Base):
@@ -184,8 +184,9 @@ person.registered = Registered(date=get_double_nested_table_data(0, "registered"
                                age=get_double_nested_table_data(0, "registered", "age"),
                                )
 person.id_person = IdPerson(name=get_double_nested_table_data(0, "id", "name"),
-                           value=get_double_nested_table_data(0, "id", "value"),
-                           )
+                            value=get_double_nested_table_data(0, "id", "value"),
+                            person_id=1
+                            )
 
 location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
                          number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
@@ -209,6 +210,5 @@ session.add(location)
 session.add(dob)
 
 session.commit()
-
 
 session.close()
