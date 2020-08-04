@@ -22,6 +22,7 @@ class Person(Base):
     login = relationship("Login", uselist=False, back_populates="person")
     registered = relationship("Registered", uselist=False, back_populates="person")
     id_person = relationship("IdPerson", uselist=False, back_populates="person")
+    nat = Column(String)
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -167,6 +168,7 @@ person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
 person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
 person.cell = remove_special_characters_from_string(get_not_nested_table_data(0, "cell"))
 person.id = 1
+person.nat = get_not_nested_table_data(0, "nat")
 person.location = Location(person_id=1)
 person.login = Login(uuid=get_double_nested_table_data(0, 'login', 'uuid'),
                      username=get_double_nested_table_data(0, 'login', 'username'),
