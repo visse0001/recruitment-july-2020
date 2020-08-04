@@ -76,3 +76,16 @@ def count_indexes():
     result = get_json_dict(JSON_NAME)
     obj = result['results']
     return len(obj)
+
+def get_not_nested_table_data_all_indexes(table_name: str):
+    result = get_json_dict(JSON_NAME)
+    results_list = []
+    index = 0
+    for element in range(count_indexes()):
+        obj = result['results'][index][table_name]
+        # results_list.append = obj
+        index += 1
+        str_obj = str(obj)
+        results_list.append(str_obj)
+    return results_list
+
