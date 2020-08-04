@@ -6,7 +6,7 @@ import sqlite3
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_indexes, list_wihout_spec_char
+    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes
 
 Base = declarative_base()
 
@@ -38,9 +38,11 @@ class Name(Base):
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship("Person", back_populates="name")
     title = Column(String)
+    first = Column(String)
+    last = Column(String)
 
     def __repr__(self):
-        return f'(id:{self.id}, title:{self.title})'
+        return f'(id:{self.id}, title:{self.title}, first:{self.first}, last:{self.last})'
 
 
 class Location(Base):
@@ -175,6 +177,10 @@ all_cell_with_spec_char = get_not_nested_table_data_from_all_indexes("cell")
 all_cell = list_wihout_spec_char(all_cell_with_spec_char)
 all_nat = get_not_nested_table_data_from_all_indexes("nat")
 
+all_name_titles = get_double_nested_table_data_from_all_indexes("name", "title")
+all_name_firsts = get_double_nested_table_data_from_all_indexes("name", "first")
+all_name_lasts = get_double_nested_table_data_from_all_indexes("name", "last")
+
 
 
 def bulk_save_persons():
@@ -188,8 +194,19 @@ def bulk_save_persons():
     session.add_all(persons)
     session.commit()
 
+def bulk_save_name():
+    index = 0
+    names = []
+    for element in range(count_indexes()):
+        name = Name(title=all_name_titles[index], person_id=index+1, first=all_name_firsts[index], last=all_name_lasts[index])
+        names.append(name)
+        index += 1
+
+    session.add_all(names)
+    session.commit()
 
 bulk_save_persons()
+bulk_save_name()
 
 session.commit()
 
