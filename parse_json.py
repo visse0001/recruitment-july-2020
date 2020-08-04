@@ -1,4 +1,5 @@
 import json
+import datetime
 
 JSON_NAME = "persons.json"
 
@@ -34,3 +35,39 @@ def remove_special_characters_from_string(a_string: str):
         if character.isalnum():
             alpha_numeric += character
     return alpha_numeric
+
+def get_days_until_birthday(index: int, first_table: str, second_table: str):
+    tday = datetime.datetime.now(tz=None)
+    current_year = int(str(tday)[0:4])
+    current_month = int(str(tday)[5:7])
+    current_day = int(str(tday)[8:10])
+    str_birthday_date = get_double_nested_table_data(index, first_table, second_table)[0:10]
+
+    list_birthday_date = str_birthday_date.split('-')
+
+    person_month = list_birthday_date[1]
+    person_month = int(delete_zero_from_str_if_first(person_month))
+    person_day = list_birthday_date[2]
+    person_day = int(delete_zero_from_str_if_first(person_day))
+
+
+    current_date = datetime.date(year=current_year, month=current_month, day=current_day)
+    birthday = datetime.date(year=current_year, month=person_month, day=person_day)
+
+    days_until_birthday = birthday - current_date
+
+    str_days_until_birthday = str(days_until_birthday)[1:3]
+    int_days_until_birthday = int(str_days_until_birthday)
+
+    if int_days_until_birthday < 0:
+        days_until_birthday = current_date - birthday
+    else:
+        days_until_birthday = birthday - current_date
+    only_days_int = int(str(days_until_birthday)[1:3])
+
+    return only_days_int
+
+def delete_zero_from_str_if_first(a_string):
+    if a_string[0] == 0:
+        a_string = int(a_string[1])
+    return a_string

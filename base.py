@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Unicode, ForeignK
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from parse_json import JSON_NAME, get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data
+from parse_json import JSON_NAME, get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, remove_special_characters_from_string,get_days_until_birthday
 
 Base = declarative_base()
 
@@ -14,6 +14,8 @@ class Person(Base):
     name = relationship("Name", uselist=False, back_populates="person")
     gender = Column(String)
     location = relationship("Location", uselist=False, back_populates="person")
+    phone = Column(String)
+    cell = Column(String)
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -39,6 +41,15 @@ class Location(Base):
     person = relationship("Person", back_populates="location")
 
 
+class Dob(Base):
+    __tablename__ = 'dob'
+    id = Column(Integer, primary_key=True)
+    person_id = Column(Integer, ForeignKey('person.id'))
+    person = relationship("Person", back_populates="location")
+    date = Column(String)
+    age = Column(Integer)
+    days_until_birth = Column(Integer)
+
 class Street(Base):
     __tablename__ = 'street'
     id = Column(Integer, primary_key=True)
@@ -59,16 +70,23 @@ session = Session()
 person = Person()
 location = Location()
 street = Street()
+dob = Dob()
 
 # To INSERT data into tables
 person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
+person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
+person.cell = remove_special_characters_from_string(get_not_nested_table_data(0, "cell"))
 person.id = 1
 person.location = Location(person_id=1)
 
 location.street = Street(name=get_triple_nested_table_data(0, 'location', 'street', 'name'),
                          number=get_triple_nested_table_data(0, 'location', 'street', 'number'),
                          location_id=1)
+
+dob.date = get_double_nested_table_data(0, "dob", "date")
+dob.age = get_double_nested_table_data(0, "dob", "age")
+dob.days_until_birth = get_days_until_birthday(0, "dob", "date")
 
 # To add data
 session.add(person)
@@ -83,7 +101,7 @@ session.commit()
 # print(result)
 
 
-# result2 = engine.execute("select * from street")
+# result2 = engine.execute("select * from person")
 # for row in result2:
 #     print(row)
 
