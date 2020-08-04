@@ -164,6 +164,23 @@ dob = Dob()
 login = Login()
 id_person = IdPerson()
 
+# function from stackoverflow
+# foos = [Foo(bar='a',), Foo(bar='b'), Foo(bar='c')]
+# session.bulk_save_objects(foos, return_defaults=True)
+# for foo in foos:
+#     assert foo.id is not None
+# session.commit()
+
+# my notes
+person_index_0 = get_not_nested_table_data(0, "gender")
+person_index_1 = get_not_nested_table_data(1, "gender")
+persons_gender = [Person(gender=person_index_0), Person(gender=person_index_1)]
+session.bulk_save_objects(persons_gender, return_defaults=True)
+for gender in persons_gender:
+    assert gender.id is not None
+session.commit()
+
+
 person.gender = get_not_nested_table_data(0, "gender")
 person.name = Name(title=get_double_nested_table_data(0, "name", "title"))
 person.phone = remove_special_characters_from_string(get_not_nested_table_data(0, "phone"))
