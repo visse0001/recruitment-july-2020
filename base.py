@@ -182,8 +182,17 @@ count_of_persons = count_persons(JSON_NAME)
 for index in range(1000):
     person = Person(gender=get_not_nested_table_data(index, "gender", JSON_NAME),
                     email=get_not_nested_table_data(index, "email", JSON_NAME),
-                    phone=get_not_nested_table_data(index, "phone", JSON_NAME),
+                    phone=list_wihout_spec_char(get_not_nested_table_data(index, "phone", JSON_NAME)),
+                    cell=list_wihout_spec_char(get_not_nested_table_data(index, "cell", JSON_NAME)),
+                    nat=get_not_nested_table_data(index, "nat", JSON_NAME)
                     )
+
+    name = Name(title=get_double_nested_table_data(index, "name", "title", JSON_NAME),
+                first=get_double_nested_table_data(index, "name", "first", JSON_NAME),
+                last=get_double_nested_table_data(index, "name", "last", JSON_NAME)
+                )
     session.add(person)
+    session.add(name)
+
     session.commit()
 session.close()
