@@ -164,35 +164,37 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
 session = Session()
-# person = Person()
+person = Person()
 name = Name()
-location = Location()
-street = Street()
-login = Login()
-coordinates = Coordinates()
-timezone = Timezone()
-dob = Dob()
-registered = Registered()
-id_person = IdPerson()
+# location = Location()
+# street = Street()
+# login = Login()
+# coordinates = Coordinates()
+# timezone = Timezone()
+# dob = Dob()
+# registered = Registered()
+# id_person = IdPerson()
 
 # populate data
 # for, person, location -> person, ... commit, next index
 session = Session()
-count_of_persons = count_persons(JSON_NAME)
+count_of_persons = count_persons()
 for index in range(1000):
-    person = Person(gender=get_not_nested_table_data(index, "gender", JSON_NAME),
-                    email=get_not_nested_table_data(index, "email", JSON_NAME),
-                    phone=list_wihout_spec_char(get_not_nested_table_data(index, "phone", JSON_NAME)),
-                    cell=list_wihout_spec_char(get_not_nested_table_data(index, "cell", JSON_NAME)),
-                    nat=get_not_nested_table_data(index, "nat", JSON_NAME)
+    person = Person(gender=get_not_nested_table_data(index, "gender"),
+                    email=get_not_nested_table_data(index, "email"),
+                    phone=remove_special_characters_from_string(get_not_nested_table_data(index, "phone")),
+                    cell=remove_special_characters_from_string(get_not_nested_table_data(index, "cell")),
+                    days_until_birthday=get_days_until_birthday(index, "dob", "date"),
+                    nat=get_not_nested_table_data(index, "nat"),
                     )
-
-    name = Name(title=get_double_nested_table_data(index, "name", "title", JSON_NAME),
-                first=get_double_nested_table_data(index, "name", "first", JSON_NAME),
-                last=get_double_nested_table_data(index, "name", "last", JSON_NAME)
-                )
     session.add(person)
-    session.add(name)
+    session.commit()
 
+    name = Name(title=get_double_nested_table_data(index, "name", "title"),
+                first=get_double_nested_table_data(index, "name", "first"),
+                last=get_double_nested_table_data(index, "name", "last"),
+                person_id=person.id
+                )
+    session.add(name)
     session.commit()
 session.close()

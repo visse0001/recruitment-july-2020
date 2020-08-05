@@ -4,27 +4,31 @@ import datetime
 JSON_NAME = "persons.json"
 
 
-def get_json_dict(json_name):
-    json_file = open(json_name, 'r')
+def get_json_dict():
+    json_file = open(JSON_NAME, 'r')
     json_data = json_file.read()
     obj = json.loads(json_data)
     return obj
 
 
-def get_not_nested_table_data(index: int, table_name: str, json_name):
-    result = get_json_dict(json_name)
+def get_not_nested_table_data(index: int, table_name: str):
+    result = get_json_dict()
     obj = result['results'][index][table_name]
     return obj
 
 
-def get_double_nested_table_data(index: int, first_table: str, second_table: str, json_name):
-    result = get_json_dict(json_name)
+def get_double_nested_table_data(index: int, first_table: str, second_table: str):
+    result = get_json_dict()
     obj = result['results'][index][first_table][second_table]
     return obj
 
+get_not_nested_table_data(0, "email")
+get_double_nested_table_data(1, "name", "title")
+
+
 
 def get_triple_nested_table_data(index: int, first_table: str, second_table: str, third_table: str):
-    result = get_json_dict(JSON_NAME)
+    result = get_json_dict()
     obj = result['results'][index][first_table][second_table][third_table]
     return obj
 
@@ -37,12 +41,12 @@ def remove_special_characters_from_string(a_string: str):
     return alpha_numeric
 
 
-def get_days_until_birthday(index: int, first_table: str, second_table: str, json_name):
+def get_days_until_birthday(index: int, first_table: str, second_table: str):
     tday = datetime.datetime.now(tz=None)
     current_year = int(str(tday)[0:4])
     current_month = int(str(tday)[5:7])
     current_day = int(str(tday)[8:10])
-    str_birthday_date = get_double_nested_table_data(index, first_table, second_table, json_name)[0:10]
+    str_birthday_date = get_double_nested_table_data(index, first_table, second_table)[0:10]
 
     list_birthday_date = str_birthday_date.split('-')
 
@@ -74,18 +78,17 @@ def delete_zero_from_str_if_first(a_string):
     return a_string
 
 
-def count_persons(json_name):
-    result = get_json_dict(json_name)
+def count_persons():
+    result = get_json_dict()
     obj = result['results']
-    print(obj)
     return len(obj)
 
 
-def get_not_nested_table_data_from_all_indexes(table_name: str, json_name):
-    result = get_json_dict(json_name)
+def get_not_nested_table_data_from_all_indexes(table_name: str):
+    result = get_json_dict()
     results_list = []
     index = 0
-    for element in range(count_persons(json_name)):
+    for element in range(count_persons()):
         obj = result['results'][index][table_name]
         index += 1
         str_obj = str(obj)
@@ -93,11 +96,11 @@ def get_not_nested_table_data_from_all_indexes(table_name: str, json_name):
     return results_list
 
 
-def get_double_nested_table_data_from_all_indexes(first_table: str, second_table: str, json_name):
-    result = get_json_dict(json_name)
+def get_double_nested_table_data_from_all_indexes(first_table: str, second_table: str):
+    result = get_json_dict()
     results_list = []
     index = 0
-    for element in range(count_persons(json_name)):
+    for element in range(count_persons()):
         obj = result['results'][index][first_table][second_table]
         index += 1
         str_obj = str(obj)
@@ -105,8 +108,8 @@ def get_double_nested_table_data_from_all_indexes(first_table: str, second_table
     return results_list
 
 
-def get_triple_nested_table_data_from_all_indexes(first_table: str, second_table: str, third_table: str, json_name):
-    result = get_json_dict(json_name)
+def get_triple_nested_table_data_from_all_indexes(first_table: str, second_table: str, third_table: str):
+    result = get_json_dict()
     results_list = []
     index = 0
     for element in range(count_persons()):
@@ -117,7 +120,7 @@ def get_triple_nested_table_data_from_all_indexes(first_table: str, second_table
     return results_list
 
 
-def list_wihout_spec_char(seq: list):
+def list_wihout_spec_char(seq):
     new_list = []
     for element in seq:
         result = remove_special_characters_from_string(element)
@@ -136,4 +139,4 @@ def list_wihout_spec_char(seq: list):
 # all_name_title = get_double_nested_table_data_from_all_indexes("name", "title")
 # print(all_phones)
 
-count_persons(JSON_NAME)
+# count_persons(JSON_NAME)
