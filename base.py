@@ -6,8 +6,8 @@ import sqlite3
 
 from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
     remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_indexes, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, \
-    get_triple_nested_table_data_from_all_indexes
+    count_persons, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, \
+    get_triple_nested_table_data_from_all_indexes, JSON_NAME
 
 Base = declarative_base()
 
@@ -27,7 +27,7 @@ class Person(Base):
     cell = Column(String)
     id_person = relationship("IdPerson", uselist=False, back_populates="person")
     nat = Column(String)
-    days_until_bith = Column(Integer)
+    days_until_birthday = Column(Integer)
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -51,15 +51,15 @@ class Location(Base):
     __tablename__ = 'location'
 
     id = Column(Integer, primary_key=True)
-    street = relationship("Street", uselist=False, back_populates="location")
-    coordinates = relationship("Coordinates", uselist=False, back_populates="location")
-    timezone = relationship("Timezone", uselist=False, back_populates="location")
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship("Person", back_populates="location")
+    street = relationship("Street", uselist=False, back_populates="location")
     city = Column(String)
     state = Column(String)
     country = Column(String)
     postcode = Column(Integer)
+    coordinates = relationship("Coordinates", uselist=False, back_populates="location")
+    timezone = relationship("Timezone", uselist=False, back_populates="location")
 
 
 class Street(Base):
@@ -91,32 +91,6 @@ class Login(Base):
 
     def __repr__(self):
         return f'(id:{self.id}, username:{self.username})'
-
-
-class Coordinates(Base):
-    __tablename__ = 'coordinates'
-
-    id = Column(Integer, primary_key=True)
-    location_id = Column(Integer, ForeignKey('location.id'))
-    location = relationship("Location", back_populates="coordinates")
-    latitude = Column(String)
-    longitude = Column(String)
-
-    def __repr__(self):
-        return f'(id:{self.id}, latitude:{self.latitude}, longitude:{self.longitude})'
-
-
-class Timezone(Base):
-    __tablename__ = 'timezone'
-
-    id = Column(Integer, primary_key=True)
-    location_id = Column(Integer, ForeignKey('location.id'))
-    location = relationship("Location", back_populates="timezone")
-    offset = Column(String)
-    description = Column(String)
-
-    def __repr__(self):
-        return f'(id:{self.id}, offset:{self.offset}, description:{self.description})'
 
 
 class Dob(Base):
@@ -159,24 +133,57 @@ class IdPerson(Base):
         return f'(id:{self.id_person}, name:{self.name}, value:{self.value})'
 
 
+class Coordinates(Base):
+    __tablename__ = 'coordinates'
+
+    id = Column(Integer, primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    location = relationship("Location", back_populates="coordinates")
+    latitude = Column(String)
+    longitude = Column(String)
+
+    def __repr__(self):
+        return f'(id:{self.id}, latitude:{self.latitude}, longitude:{self.longitude})'
+
+
+class Timezone(Base):
+    __tablename__ = 'timezone'
+
+    id = Column(Integer, primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    location = relationship("Location", back_populates="timezone")
+    offset = Column(String)
+    description = Column(String)
+
+    def __repr__(self):
+        return f'(id:{self.id}, offset:{self.offset}, description:{self.description})'
+
+
 engine = create_engine('sqlite:///persons.db', echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
 session = Session()
-person = Person()
+# person = Person()
+name = Name()
 location = Location()
 street = Street()
-dob = Dob()
 login = Login()
-id_person = IdPerson()
+coordinates = Coordinates()
 timezone = Timezone()
+dob = Dob()
+registered = Registered()
+id_person = IdPerson()
 
 # populate data
 # for, person, location -> person, ... commit, next index
-
-
-
-session.commit()
-
+session = Session()
+count_of_persons = count_persons(JSON_NAME)
+for index in range(1000):
+    person = Person(gender=get_not_nested_table_data(index, "gender", JSON_NAME),
+                    email=get_not_nested_table_data(index, "email", JSON_NAME),
+                    phone=get_not_nested_table_data(index, "phone", JSON_NAME),
+                    )
+    session.add(person)
+    session.commit()
 session.close()
