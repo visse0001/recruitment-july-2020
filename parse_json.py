@@ -1,5 +1,6 @@
 import json
 import datetime
+from datetime import datetime, date
 
 JSON_NAME = "persons.json"
 
@@ -23,10 +24,6 @@ def get_double_nested_table_data(index: int, first_table: str, second_table: str
     return obj
 
 
-get_not_nested_table_data(0, "email")
-get_double_nested_table_data(1, "name", "title")
-
-
 def get_triple_nested_table_data(index: int, first_table: str, second_table: str, third_table: str):
     result = get_json_dict()
     obj = result['results'][index][first_table][second_table][third_table]
@@ -42,34 +39,20 @@ def remove_special_characters_from_string(a_string: str):
 
 
 def get_days_until_birthday(index: int, first_table: str, second_table: str):
-    tday = datetime.datetime.now(tz=None)
-    current_year = int(str(tday)[0:4])
-    current_month = int(str(tday)[5:7])
-    current_day = int(str(tday)[8:10])
-    str_birthday_date = get_double_nested_table_data(index, first_table, second_table)[0:10]
+    birth = get_double_nested_table_data(index, first_table, second_table)
+    month = int(birth[5:7])
+    day = int(birth[8:10])
 
-    list_birthday_date = str_birthday_date.split('-')
+    today = date.today()
 
-    person_month = list_birthday_date[1]
-    person_month = int(delete_zero_from_str_if_first(person_month))
-    person_day = list_birthday_date[2]
-    person_day = int(delete_zero_from_str_if_first(person_day))
+    birthday = date(today.year, month, day)
+    if birthday < today:
+        birthday = birthday.replace(year=today.year + 1)
+    time_to_birthday = abs(birthday - today)
+    time_to_birthday = str(time_to_birthday)[0:3]
+    time_to_birthday = int(time_to_birthday)
 
-    current_date = datetime.date(year=current_year, month=current_month, day=current_day)
-    birthday = datetime.date(year=current_year, month=person_month, day=person_day)
-
-    days_until_birthday = birthday - current_date
-
-    str_days_until_birthday = str(days_until_birthday)[1:3]
-    int_days_until_birthday = int(str_days_until_birthday)
-
-    if int_days_until_birthday < 0:
-        days_until_birthday = current_date - birthday
-    else:
-        days_until_birthday = birthday - current_date
-    only_days_int = int(str(days_until_birthday)[1:3])
-
-    return only_days_int
+    return time_to_birthday
 
 
 def delete_zero_from_str_if_first(a_string):
@@ -126,3 +109,5 @@ def list_wihout_spec_char(seq):
         result = remove_special_characters_from_string(element)
         new_list.append(result)
     return new_list
+
+# get_days_until_birthday(0, "dob", "date")
