@@ -2,12 +2,13 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-import sqlite3
-
-from parse_json import get_not_nested_table_data, get_double_nested_table_data, get_triple_nested_table_data, \
-    remove_special_characters_from_string, get_days_until_birthday, get_not_nested_table_data_from_all_indexes, \
-    count_persons, list_wihout_spec_char, get_double_nested_table_data_from_all_indexes, \
-    get_triple_nested_table_data_from_all_indexes, JSON_NAME
+from parse_json import \
+    get_not_nested_table_data, \
+    get_double_nested_table_data, \
+    get_triple_nested_table_data, \
+    remove_special_characters_from_string, \
+    get_days_until_birthday, \
+    count_persons
 
 Base = declarative_base()
 

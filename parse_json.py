@@ -1,6 +1,6 @@
 import json
 import datetime
-from datetime import datetime, date
+from datetime import datetime
 
 JSON_NAME = "persons.json"
 
@@ -46,52 +46,10 @@ def get_days_until_birthday(index: int, first_table: str, second_table: str):
     return delta.days
 
 
-def delete_zero_from_str_if_first(a_string):
-    if a_string[0] == 0:
-        a_string = int(a_string[1])
-    return a_string
-
-
 def count_persons():
     result = get_json_dict()
     obj = result['results']
     return len(obj)
-
-
-def get_not_nested_table_data_from_all_indexes(table_name: str):
-    result = get_json_dict()
-    results_list = []
-    index = 0
-    for element in range(count_persons()):
-        obj = result['results'][index][table_name]
-        index += 1
-        str_obj = str(obj)
-        results_list.append(str_obj)
-    return results_list
-
-
-def get_double_nested_table_data_from_all_indexes(first_table: str, second_table: str):
-    result = get_json_dict()
-    results_list = []
-    index = 0
-    for element in range(count_persons()):
-        obj = result['results'][index][first_table][second_table]
-        index += 1
-        str_obj = str(obj)
-        results_list.append(str_obj)
-    return results_list
-
-
-def get_triple_nested_table_data_from_all_indexes(first_table: str, second_table: str, third_table: str):
-    result = get_json_dict()
-    results_list = []
-    index = 0
-    for element in range(count_persons()):
-        obj = result['results'][index][first_table][second_table][third_table]
-        index += 1
-        str_obj = str(obj)
-        results_list.append(str_obj)
-    return results_list
 
 
 def list_wihout_spec_char(seq):
