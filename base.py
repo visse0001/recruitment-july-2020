@@ -187,6 +187,7 @@ for index in range(1000):
                     days_until_birthday=get_days_until_birthday(index, "dob", "date"),
                     nat=get_not_nested_table_data(index, "nat"),
                     )
+
     session.add(person)
     session.commit()
 
@@ -195,6 +196,7 @@ for index in range(1000):
                 last=get_double_nested_table_data(index, "name", "last"),
                 person_id=person.id
                 )
+
     session.add(name)
     session.commit()
 
@@ -204,6 +206,7 @@ for index in range(1000):
                         postcode=get_double_nested_table_data(index, "location", "postcode"),
                         person_id=person.id
                         )
+
     session.add(location)
     session.commit()
 
@@ -211,6 +214,7 @@ for index in range(1000):
                     number=get_triple_nested_table_data(index, "location", "street", "number"),
                     name=get_triple_nested_table_data(index, "location", "street", "name")
                     )
+
     session.add(street)
     session.commit()
 
@@ -225,6 +229,7 @@ for index in range(1000):
                         offset=get_triple_nested_table_data(index, "location", "timezone", "offset"),
                         description=get_triple_nested_table_data(index, "location", "timezone", "description"),
                         )
+
     session.add(timezone)
     session.commit()
 
@@ -237,9 +242,25 @@ for index in range(1000):
                   sha1=get_double_nested_table_data(index, "login", "sha1"),
                   sha256=get_double_nested_table_data(index, "login", "sha256")
                   )
+
     session.add(login)
     session.commit()
 
-    dob = Dob()
+    dob = Dob(person_id=person.id,
+              date=get_double_nested_table_data(index, "dob", "date"),
+              age=get_double_nested_table_data(index, "dob", "age"),
+              days_until_birth=get_days_until_birthday(index, "dob", "date")
+              )
+
+    session.add(dob)
+    session.commit()
+
+    id_person = IdPerson(person_id=person.id,
+                         name=get_double_nested_table_data(index, "id", "name"),
+                         value=get_double_nested_table_data(index, "id", "value"),
+                         )
+
+    session.add(id_person)
+    session.commit()
 
 session.close()
