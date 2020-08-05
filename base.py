@@ -27,6 +27,7 @@ class Person(Base):
     cell = Column(String)
     id_person = relationship("IdPerson", uselist=False, back_populates="person")
     nat = Column(String)
+    days_until_bith = Column(Integer)
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -169,65 +170,12 @@ street = Street()
 dob = Dob()
 login = Login()
 id_person = IdPerson()
+timezone = Timezone()
 
-all_genders = get_not_nested_table_data_from_all_indexes("gender")
-all_emails = get_not_nested_table_data_from_all_indexes("email")
-all_phone_with_spec_char = get_not_nested_table_data_from_all_indexes("phone")
-all_phone = list_wihout_spec_char(all_phone_with_spec_char)
-all_cell_with_spec_char = get_not_nested_table_data_from_all_indexes("cell")
-all_cell = list_wihout_spec_char(all_cell_with_spec_char)
-all_nat = get_not_nested_table_data_from_all_indexes("nat")
-
-all_name_titles = get_double_nested_table_data_from_all_indexes("name", "title")
-all_name_firsts = get_double_nested_table_data_from_all_indexes("name", "first")
-all_name_lasts = get_double_nested_table_data_from_all_indexes("name", "last")
-
-all_location_street_numbers = get_triple_nested_table_data_from_all_indexes("location", "street", "number")
-all_location_street_names = get_triple_nested_table_data_from_all_indexes("location", "street", "name")
+# populate data
+# for, person, location -> person, ... commit, next index
 
 
-def bulk_save_persons():
-    index = 0
-    persons = []
-    for element in range(count_indexes()):
-        person = Person(gender=all_genders[index], email=all_emails[index], phone=all_phone[index],
-                        cell=all_cell[index], nat=all_nat[index])
-        persons.append(person)
-        index += 1
-
-    session.add_all(persons)
-    session.commit()
-
-
-def bulk_save_name():
-    index = 0
-    names = []
-    for element in range(count_indexes()):
-        name = Name(title=all_name_titles[index], person_id=index + 1, first=all_name_firsts[index],
-                    last=all_name_lasts[index])
-        names.append(name)
-        index += 1
-
-    session.add_all(names)
-    session.commit()
-
-
-def bulk_save_street():
-    index = 0
-    streets = []
-    for element in range(count_indexes()):
-        street = Street(name=all_location_street_names[index], number=all_location_street_numbers[index],
-                        location_id=index + 1)
-        streets.append(street)
-        index += 1
-
-    session.add_all(streets)
-    session.commit()
-
-
-bulk_save_persons()
-bulk_save_name()
-bulk_save_street()
 
 session.commit()
 
