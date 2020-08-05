@@ -221,5 +221,25 @@ for index in range(1000):
     session.add(coordinates)
     session.commit()
 
+    timezone = Timezone(location_id=location.id,
+                        offset=get_triple_nested_table_data(index, "location", "timezone", "offset"),
+                        description=get_triple_nested_table_data(index, "location", "timezone", "description"),
+                        )
+    session.add(timezone)
+    session.commit()
+
+    login = Login(person_id=person.id,
+                  uuid=get_double_nested_table_data(index, "login", "uuid"),
+                  username=get_double_nested_table_data(index, "login", "username"),
+                  password=get_double_nested_table_data(index, "login", "password"),
+                  salt=get_double_nested_table_data(index, "login", "salt"),
+                  md5=get_double_nested_table_data(index, "login", "md5"),
+                  sha1=get_double_nested_table_data(index, "login", "sha1"),
+                  sha256=get_double_nested_table_data(index, "login", "sha256")
+                  )
+    session.add(login)
+    session.commit()
+
+    dob = Dob()
 
 session.close()
