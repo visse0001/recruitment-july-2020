@@ -39,20 +39,11 @@ def remove_special_characters_from_string(a_string: str):
 
 
 def get_days_until_birthday(index: int, first_table: str, second_table: str):
-    birth = get_double_nested_table_data(index, first_table, second_table)
-    month = int(birth[5:7])
-    day = int(birth[8:10])
-
-    today = date.today()
-
-    birthday = date(today.year, month, day)
-    if birthday < today:
-        birthday = birthday.replace(year=today.year + 1)
-    time_to_birthday = abs(birthday - today)
-    time_to_birthday = str(time_to_birthday)[0:3]
-    time_to_birthday = int(time_to_birthday)
-
-    return time_to_birthday
+    birthday_str = get_double_nested_table_data(index, first_table, second_table)
+    birthday = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+    now = datetime.now()
+    delta = now - birthday
+    return delta.days
 
 
 def delete_zero_from_str_if_first(a_string):
@@ -109,5 +100,3 @@ def list_wihout_spec_char(seq):
         result = remove_special_characters_from_string(element)
         new_list.append(result)
     return new_list
-
-# get_days_until_birthday(0, "dob", "date")
