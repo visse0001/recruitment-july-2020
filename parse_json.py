@@ -51,10 +51,3 @@ def count_persons():
     obj = result['results']
     return len(obj)
 
-
-def list_wihout_spec_char(seq):
-    new_list = []
-    for element in seq:
-        result = remove_special_characters_from_string(element)
-        new_list.append(result)
-    return new_list
