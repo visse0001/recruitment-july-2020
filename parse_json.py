@@ -22,9 +22,9 @@ def get_double_nested_table_data(index: int, first_table: str, second_table: str
     obj = result['results'][index][first_table][second_table]
     return obj
 
+
 get_not_nested_table_data(0, "email")
 get_double_nested_table_data(1, "name", "title")
-
 
 
 def get_triple_nested_table_data(index: int, first_table: str, second_table: str, third_table: str):
@@ -126,17 +126,3 @@ def list_wihout_spec_char(seq):
         result = remove_special_characters_from_string(element)
         new_list.append(result)
     return new_list
-
-
-# all_genders = get_not_nested_table_data_from_all_indexes("gender")
-# all_emails = get_not_nested_table_data_from_all_indexes("email")
-# all_phones = get_not_nested_table_data_from_all_indexes("phone")
-# all_phones = list_wihout_spec_char(all_phones)
-# all_cells = get_not_nested_table_data_from_all_indexes("cell")
-# all_cells = list_wihout_spec_char(all_cells)
-# all_nat = get_not_nested_table_data_from_all_indexes("nat")
-#
-# all_name_title = get_double_nested_table_data_from_all_indexes("name", "title")
-# print(all_phones)
-
-# count_persons(JSON_NAME)
