@@ -68,8 +68,8 @@ class Street(Base):
     id = Column(Integer, primary_key=True)
     location_id = Column(Integer, ForeignKey('location.id'))
     location = relationship("Location", back_populates="street")
-    name = Column(String)
     number = Column(Integer)
+    name = Column(String)
 
     def __repr__(self):
         return f'(id:{self.id}, name:{self.name}, number:{self.number})'
@@ -163,9 +163,9 @@ engine = create_engine('sqlite:///persons.db', echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
-session = Session()
-person = Person()
-name = Name()
+# session = Session()
+# person = Person()
+# name = Name()
 # location = Location()
 # street = Street()
 # login = Login()
@@ -197,4 +197,29 @@ for index in range(1000):
                 )
     session.add(name)
     session.commit()
+
+    location = Location(city=get_double_nested_table_data(index, "location", "city"),
+                        state=get_double_nested_table_data(index, "location", "state"),
+                        country=get_double_nested_table_data(index, "location", "country"),
+                        postcode=get_double_nested_table_data(index, "location", "postcode"),
+                        person_id=person.id
+                        )
+    session.add(location)
+    session.commit()
+
+    street = Street(location_id=location.id,
+                    number=get_triple_nested_table_data(index, "location", "street", "number"),
+                    name=get_triple_nested_table_data(index, "location", "street", "name")
+                    )
+    session.add(street)
+    session.commit()
+
+    coordinates = Coordinates(location_id=location.id,
+                              latitude=get_triple_nested_table_data(index, "location", "coordinates", "latitude"),
+                              longitude=get_triple_nested_table_data(index, "location", "coordinates", "longitude"),
+                              )
+    session.add(coordinates)
+    session.commit()
+
+
 session.close()
