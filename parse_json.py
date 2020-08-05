@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import datetime
 
 JSON_NAME = "persons.json"
 
@@ -38,17 +38,14 @@ def remove_special_characters_from_string(a_string: str):
 
 
 def get_days_until_birthday(index: int, first_table: str, second_table: str):
-    today = date.today()
-
+    now = datetime.now()
+    year = now.year
     birthday_str = get_double_nested_table_data(index, first_table, second_table)
-    month = int(birthday_str[5:7])
-    day = int(birthday_str[8:10])
-    my_birthday = date(today.year, month, day)
-    if my_birthday < today:
-        my_birthday = my_birthday.replace(year=today.year + 1)
-
-    time_to_birthday = abs(my_birthday - today)
-    return time_to_birthday
+    birthday_str = str(year) + birthday_str[4:]
+    birthday = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+    now = datetime.now()
+    delta = now - birthday
+    return delta.days
 
 
 def count_persons():
