@@ -27,7 +27,6 @@ class Person(Base):
     cell = Column(String)
     id_person = relationship("IdPerson", uselist=False, back_populates="person")
     nat = Column(String)
-    days_until_birthday = Column(Integer)
 
     def __repr__(self):
         return f'(id:{self.id}, gender:{self.name})'
@@ -82,7 +81,7 @@ class Login(Base):
     person_id = Column(Integer, ForeignKey('person.id'))
     person = relationship("Person", back_populates="login")
     uuid = Column(String)
-    username = Column(String, unique=True)
+    username = Column(String)
     password = Column(String)
     salt = Column(String)
     md5 = Column(String)
@@ -101,10 +100,10 @@ class Dob(Base):
     person = relationship("Person", back_populates="dob")
     date = Column(String)
     age = Column(Integer)
-    days_until_birth = Column(Integer)
+    days_until_birthday = Column(Integer)
 
     def __repr__(self):
-        return f'(id:{self.id}, date:{self.date}, age:{self.age}, days_until_birth:{self.days_until_birth})'
+        return f'(id:{self.id}, date:{self.date}, age:{self.age}, days_until_birth:{self.days_until_birthday})'
 
 
 class Registered(Base):
@@ -184,7 +183,6 @@ for index in range(1000):
                     email=get_not_nested_table_data(index, "email"),
                     phone=remove_special_characters_from_string(get_not_nested_table_data(index, "phone")),
                     cell=remove_special_characters_from_string(get_not_nested_table_data(index, "cell")),
-                    days_until_birthday=get_days_until_birthday(index, "dob", "date"),
                     nat=get_not_nested_table_data(index, "nat"),
                     )
 
@@ -249,7 +247,7 @@ for index in range(1000):
     dob = Dob(person_id=person.id,
               date=get_double_nested_table_data(index, "dob", "date"),
               age=get_double_nested_table_data(index, "dob", "age"),
-              days_until_birth=get_days_until_birthday(index, "dob", "date")
+              days_until_birthday=get_days_until_birthday(index, "dob", "date")
               )
 
     session.add(dob)
