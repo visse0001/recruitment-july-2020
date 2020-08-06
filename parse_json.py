@@ -56,24 +56,41 @@ def is_leap_year(str_year):
     if ((int_year % 4 == 0) and (int_year % 100 != 0)) or (int_year % 400 == 0):
         return True
 
-
+# ToDo leap year
 def get_days_until_birthday(index: int, dob: str, date: str):
+    # create two datetime objects
     now = datetime.now()
-    year = now.year
+    current_year = now.year
     birthday_str = get_double_nested_table_data(index, dob, date)
-    birthday_str = str(year) + birthday_str[4:]
-    birthday = get_datetime_obj_from_str(birthday_str)
-    delta = birthday - now
-    delta_days = delta.days + 1
+    birthday_datetime_obj = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    # change birth year to current year
+    obj_bithday_with_current_year = birthday_datetime_obj.replace(year=current_year)
+
+    # delta time
+    delta = obj_bithday_with_current_year - now
+
+    delta_days = delta.days
+
+    # check if the delta is a negative number
     if delta_days < 0:
-        birthday_str_next_year = str(year + 1) + birthday_str[4:]
-        birthday = get_datetime_obj_from_str(birthday_str_next_year)
-        delta = birthday - now
+        # it means that the birthday was already this year
+
+        # need to look at the next year
+        obj_bithday_with_current_year.replace(year=current_year + 1)
+        delta = obj_bithday_with_current_year - now
         delta_days = delta.days
-    return delta_days
+        return delta_days
+    else:
+        # birthday will be in this year
+        delta = now - obj_bithday_with_current_year
+        return delta_days
 
 
 def count_persons():
     result = get_json_dict()
     obj = result['results']
     return len(obj)
+
+
+get_days_until_birthday(398, "dob", "date")
