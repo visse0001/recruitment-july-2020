@@ -42,7 +42,13 @@ def get_datetime_obj_from_str(a_string):
     return date_obj
 
 
-def is_leap_year(str_year):
+def count_persons():
+    result = get_json_dict()
+    obj = result['results']
+    return len(obj)
+
+
+def is_leap_year(year: int, month, day: int):
     """
     Leap year is a year that compiles requirements:
     - is divisible by 4
@@ -52,11 +58,10 @@ def is_leap_year(str_year):
     by extending February to 29 days
     rather than the common 28.
     """
-    int_year = int(str_year)
-    if ((int_year % 4 == 0) and (int_year % 100 != 0)) or (int_year % 400 == 0):
+    if (((year % 4 == 0) and (year % 100 != 0)) or (year % 400 == 0)) and month == 2 and day == 29:
         return True
 
-# ToDo leap year
+
 def get_days_until_birthday(index: int, dob: str, date: str):
     # create two datetime objects
     now = datetime.now()
@@ -65,32 +70,58 @@ def get_days_until_birthday(index: int, dob: str, date: str):
     birthday_datetime_obj = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     # change birth year to current year
-    obj_bithday_with_current_year = birthday_datetime_obj.replace(year=current_year)
+    obj_birthday_with_current_year = birthday_datetime_obj.replace(year=current_year)
 
     # delta time
-    delta = obj_bithday_with_current_year - now
+    delta = obj_birthday_with_current_year - now
 
     delta_days = delta.days
 
+    month = obj_birthday_with_current_year.month
+    day = obj_birthday_with_current_year.day
     # check if the delta is a negative number
     if delta_days < 0:
         # it means that the birthday was already this year
 
         # need to look at the next year
-        obj_bithday_with_current_year.replace(year=current_year + 1)
-        delta = obj_bithday_with_current_year - now
+        next_year = int(current_year + 1)
+        obj_birthday_with_current_year.replace(year=next_year)
+
+        # get bithday month and day
+        month = obj_birthday_with_current_year.month
+        day = obj_birthday_with_current_year.day
+
+        # check if this date is in a leap year
+        if is_leap_year(current_year, month, day):
+            # then change day from 29 to 28 and add to delta.days + 1 missing day
+            birthday_with_eariel_day = obj_birthday_with_current_year.replace(day=28)
+            delta = birthday_with_eariel_day - now
+            delta_days = delta.days + 1
+            return delta_days
+
+        # delta
+        delta = obj_birthday_with_current_year - now
         delta_days = delta.days
         return delta_days
     else:
         # birthday will be in this year
-        delta = now - obj_bithday_with_current_year
-        return delta_days
+
+        # check if this date is in a leap year
+        if is_leap_year(current_year, month, day):
+            # then change day from 29 to 28 and add to delta.days + 1 missing day
+            birthday_with_eariel_day = obj_birthday_with_current_year.replace(day=28)
+
+            # delta
+            delta = now - birthday_with_eariel_day
+            delta_days = delta.days + 1
+            return delta_days
+        else:
+            # delta
+            delta = now - obj_birthday_with_current_year
+            delta_days = delta.days
+            return delta_days
 
 
-def count_persons():
-    result = get_json_dict()
-    obj = result['results']
-    return len(obj)
-
-
-get_days_until_birthday(398, "dob", "date")
+g = get_days_until_birthday(398, "dob", "date")
+# g = get_double_nested_table_data(398, "dob", "date")
+print(g)
