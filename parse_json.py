@@ -37,15 +37,40 @@ def remove_special_characters_from_string(a_string: str):
     return alpha_numeric
 
 
-def get_days_until_birthday(index: int, first_table: str, second_table: str):
+def get_datetime_obj_from_str(a_string):
+    date_obj = datetime.strptime(a_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return date_obj
+
+
+def is_leap_year(str_year):
+    """
+    Leap year is a year that compiles requirements:
+    - is divisible by 4
+    - is not divisible by 100
+    - is divisable by 400
+    Each leap year has 366 days instead of 365,
+    by extending February to 29 days
+    rather than the common 28.
+    """
+    int_year = int(str_year)
+    if ((int_year % 4 == 0) and (int_year % 100 != 0)) or (int_year % 400 == 0):
+        return True
+
+
+def get_days_until_birthday(index: int, dob: str, date: str):
     now = datetime.now()
     year = now.year
-    birthday_str = get_double_nested_table_data(index, first_table, second_table)
+    birthday_str = get_double_nested_table_data(index, dob, date)
     birthday_str = str(year) + birthday_str[4:]
-    birthday = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-    now = datetime.now()
-    delta = now - birthday
-    return delta.days
+    birthday = get_datetime_obj_from_str(birthday_str)
+    delta = birthday - now
+    delta_days = delta.days + 1
+    if delta_days < 0:
+        birthday_str_next_year = str(year + 1) + birthday_str[4:]
+        birthday = get_datetime_obj_from_str(birthday_str_next_year)
+        delta = birthday - now
+        delta_days = delta.days
+    return delta_days
 
 
 def count_persons():
