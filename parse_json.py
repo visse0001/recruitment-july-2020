@@ -95,6 +95,3 @@ def get_days_until_birthday(index: int, dob: str, date: str):
         # if birthday will be in this year
         return delta_days
 
-
-g = get_days_until_birthday(398, "dob", "date")
-print(g)
