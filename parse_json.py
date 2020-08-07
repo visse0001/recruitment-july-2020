@@ -95,3 +95,5 @@ def get_days_until_birthday(index: int, dob: str, date: str):
         # if birthday will be in this year
         return delta_days
 
+count_of_persons = count_persons()
+print(count_of_persons)
