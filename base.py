@@ -158,95 +158,96 @@ class Timezone(Base):
     def __repr__(self):
         return f'(id:{self.id}, offset:{self.offset}, description:{self.description})'
 
+if __name__ == '__main__':
+    engine = create_engine('sqlite:///persons.db', echo=True)
+    Base.metadata.create_all(bind=engine)
+    Session = sessionmaker(bind=engine)
 
-engine = create_engine('sqlite:///persons.db', echo=True)
-Base.metadata.create_all(bind=engine)
-Session = sessionmaker(bind=engine)
+    session = Session()
 
-session = Session()
-count_of_persons = count_persons()
+    count_of_persons = count_persons()
 
-for index in range(1000):
-    person = Person(gender=get_not_nested_table_data(index, "gender"),
-                    email=get_not_nested_table_data(index, "email"),
-                    phone=remove_special_characters_from_string(get_not_nested_table_data(index, "phone")),
-                    cell=remove_special_characters_from_string(get_not_nested_table_data(index, "cell")),
-                    nat=get_not_nested_table_data(index, "nat"),
-                    )
-
-    session.add(person)
-    session.commit()
-
-    name = Name(title=get_double_nested_table_data(index, "name", "title"),
-                first=get_double_nested_table_data(index, "name", "first"),
-                last=get_double_nested_table_data(index, "name", "last"),
-                person_id=person.id
-                )
-
-    session.add(name)
-    session.commit()
-
-    location = Location(city=get_double_nested_table_data(index, "location", "city"),
-                        state=get_double_nested_table_data(index, "location", "state"),
-                        country=get_double_nested_table_data(index, "location", "country"),
-                        postcode=get_double_nested_table_data(index, "location", "postcode"),
-                        person_id=person.id
+    for index in range(count_of_persons):
+        person = Person(gender=get_not_nested_table_data(index, "gender"),
+                        email=get_not_nested_table_data(index, "email"),
+                        phone=remove_special_characters_from_string(get_not_nested_table_data(index, "phone")),
+                        cell=remove_special_characters_from_string(get_not_nested_table_data(index, "cell")),
+                        nat=get_not_nested_table_data(index, "nat"),
                         )
 
-    session.add(location)
-    session.commit()
+        session.add(person)
+        session.commit()
 
-    street = Street(location_id=location.id,
-                    number=get_triple_nested_table_data(index, "location", "street", "number"),
-                    name=get_triple_nested_table_data(index, "location", "street", "name")
+        name = Name(title=get_double_nested_table_data(index, "name", "title"),
+                    first=get_double_nested_table_data(index, "name", "first"),
+                    last=get_double_nested_table_data(index, "name", "last"),
+                    person_id=person.id
                     )
 
-    session.add(street)
-    session.commit()
+        session.add(name)
+        session.commit()
 
-    coordinates = Coordinates(location_id=location.id,
-                              latitude=get_triple_nested_table_data(index, "location", "coordinates", "latitude"),
-                              longitude=get_triple_nested_table_data(index, "location", "coordinates", "longitude"),
-                              )
-    session.add(coordinates)
-    session.commit()
+        location = Location(city=get_double_nested_table_data(index, "location", "city"),
+                            state=get_double_nested_table_data(index, "location", "state"),
+                            country=get_double_nested_table_data(index, "location", "country"),
+                            postcode=get_double_nested_table_data(index, "location", "postcode"),
+                            person_id=person.id
+                            )
 
-    timezone = Timezone(location_id=location.id,
-                        offset=get_triple_nested_table_data(index, "location", "timezone", "offset"),
-                        description=get_triple_nested_table_data(index, "location", "timezone", "description"),
+        session.add(location)
+        session.commit()
+
+        street = Street(location_id=location.id,
+                        number=get_triple_nested_table_data(index, "location", "street", "number"),
+                        name=get_triple_nested_table_data(index, "location", "street", "name")
                         )
 
-    session.add(timezone)
-    session.commit()
+        session.add(street)
+        session.commit()
 
-    login = Login(person_id=person.id,
-                  uuid=get_double_nested_table_data(index, "login", "uuid"),
-                  username=get_double_nested_table_data(index, "login", "username"),
-                  password=get_double_nested_table_data(index, "login", "password"),
-                  salt=get_double_nested_table_data(index, "login", "salt"),
-                  md5=get_double_nested_table_data(index, "login", "md5"),
-                  sha1=get_double_nested_table_data(index, "login", "sha1"),
-                  sha256=get_double_nested_table_data(index, "login", "sha256")
+        coordinates = Coordinates(location_id=location.id,
+                                  latitude=get_triple_nested_table_data(index, "location", "coordinates", "latitude"),
+                                  longitude=get_triple_nested_table_data(index, "location", "coordinates", "longitude"),
+                                  )
+        session.add(coordinates)
+        session.commit()
+
+        timezone = Timezone(location_id=location.id,
+                            offset=get_triple_nested_table_data(index, "location", "timezone", "offset"),
+                            description=get_triple_nested_table_data(index, "location", "timezone", "description"),
+                            )
+
+        session.add(timezone)
+        session.commit()
+
+        login = Login(person_id=person.id,
+                      uuid=get_double_nested_table_data(index, "login", "uuid"),
+                      username=get_double_nested_table_data(index, "login", "username"),
+                      password=get_double_nested_table_data(index, "login", "password"),
+                      salt=get_double_nested_table_data(index, "login", "salt"),
+                      md5=get_double_nested_table_data(index, "login", "md5"),
+                      sha1=get_double_nested_table_data(index, "login", "sha1"),
+                      sha256=get_double_nested_table_data(index, "login", "sha256")
+                      )
+
+        session.add(login)
+        session.commit()
+
+        dob = Dob(person_id=person.id,
+                  date=get_double_nested_table_data(index, "dob", "date"),
+                  age=get_double_nested_table_data(index, "dob", "age"),
+                  days_until_birthday=get_days_until_birthday(index, "dob", "date")
                   )
 
-    session.add(login)
-    session.commit()
+        session.add(dob)
+        session.commit()
 
-    dob = Dob(person_id=person.id,
-              date=get_double_nested_table_data(index, "dob", "date"),
-              age=get_double_nested_table_data(index, "dob", "age"),
-              days_until_birthday=get_days_until_birthday(index, "dob", "date")
-              )
+        id_person = IdPerson(person_id=person.id,
+                             name=get_double_nested_table_data(index, "id", "name"),
+                             value=get_double_nested_table_data(index, "id", "value"),
+                             )
 
-    session.add(dob)
-    session.commit()
+        session.add(id_person)
+        session.commit()
 
-    id_person = IdPerson(person_id=person.id,
-                         name=get_double_nested_table_data(index, "id", "name"),
-                         value=get_double_nested_table_data(index, "id", "value"),
-                         )
-
-    session.add(id_person)
-    session.commit()
-
-session.close()
+    session.close()
