@@ -163,22 +163,9 @@ engine = create_engine('sqlite:///persons.db', echo=True)
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
-# session = Session()
-# person = Person()
-# name = Name()
-# location = Location()
-# street = Street()
-# login = Login()
-# coordinates = Coordinates()
-# timezone = Timezone()
-# dob = Dob()
-# registered = Registered()
-# id_person = IdPerson()
-
-# populate data
-# for, person, location -> person, ... commit, next index
 session = Session()
 count_of_persons = count_persons()
+
 for index in range(1000):
     person = Person(gender=get_not_nested_table_data(index, "gender"),
                     email=get_not_nested_table_data(index, "email"),
