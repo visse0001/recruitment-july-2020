@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
+from sqlalchemy import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from base import Person
+from base import Person, Dob
 from parse_json import count_persons
 engine = create_engine('sqlite:///persons.db', echo=True)
 
@@ -23,3 +24,7 @@ def perc_man():
     perc_men = (sum_men * 100) / count_persons()
     return perc_men
 
+def average_age_overall():
+    sum_age = session.query(func.sum(Dob.age)).scalar()
+    av_age = sum_age/count_persons()
+    return av_age
