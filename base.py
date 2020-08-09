@@ -90,7 +90,8 @@ class Login(Base):
     sha256 = Column(String)
 
     def __repr__(self):
-        return f'(id:{self.id}, username:{self.username})'
+        return f'(id:{self.id}, uuid:{self.uuid}, username:{self.username}, password:{self.password}, ' \
+               f'salt:{self.salt}, md5:{self.md5}, sha1:{self.sha1}, sha256:{self.sha256})'
 
 
 class Dob(Base):
