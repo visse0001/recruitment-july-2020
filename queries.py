@@ -77,11 +77,6 @@ def most_common_passwords(n):
     return list_n_passwords
 
 
-def convert_tuple_into_dict(tup, di):
-    di = dict(tup)
-    return di
-
-
 def is_born_in_date_range():
     start_date = "1988-08-11"
     end_date = "2010-08-11"
