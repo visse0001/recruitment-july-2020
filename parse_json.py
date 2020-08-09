@@ -1,5 +1,4 @@
 import json
-import datetime
 from datetime import datetime
 
 JSON_NAME = "persons.json"
@@ -38,12 +37,9 @@ def remove_special_characters_from_string(a_string: str):
     return alpha_numeric
 
 
-def get_days_until_birthday(index: int, first_table: str, second_table: str):
-    birthday_str = get_double_nested_table_data(index, first_table, second_table)
-    birthday = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-    now = datetime.now()
-    delta = now - birthday
-    return delta.days
+def get_datetime_obj_from_str(a_string):
+    date_obj = datetime.strptime(a_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return date_obj
 
 
 def count_persons():
@@ -51,3 +47,50 @@ def count_persons():
     obj = result['results']
     return len(obj)
 
+
+def get_days_until_birthday(index: int, dob: str, date: str):
+    # create two datetime objects
+    now = datetime.now()
+    current_year = now.year
+    next_year = current_year + 1
+    birthday_str = get_double_nested_table_data(index, dob, date)
+    birthday_datetime_obj = datetime.strptime(birthday_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+    # change birth year to current year
+    obj_birthday_with_current_year = birthday_datetime_obj.replace(year=current_year)
+
+    # check if bithday month and day is 29 February
+    day = obj_birthday_with_current_year.day
+    month = obj_birthday_with_current_year.month
+    if day == 29 and month == 2:
+        # change day 29 to 28. Then add 1 day to delta.days
+        new_birthday = obj_birthday_with_current_year.replace(day=28)
+
+        # delta
+        delta = new_birthday - now
+        delta_days = delta.days + 1
+
+        # bithday was in this year. Need to use next year
+        if delta_days < 0:
+            new_birthday = new_birthday.replace(year=next_year)
+            delta = new_birthday - now
+            delta_days = delta.days
+            return delta_days
+
+        # if birthday will be in this year
+        return delta_days
+
+    # birthday month and day is not 29 February
+    else:
+        delta = obj_birthday_with_current_year - now
+        delta_days = delta.days
+
+        # birthday was in this year. Need to use next year
+        if delta_days < 0:
+            new_birthday = obj_birthday_with_current_year.replace(year=next_year)
+            delta = new_birthday - now
+            delta_days = delta.days
+            return delta_days
+
+        # if birthday will be in this year
+        return delta_days
