@@ -40,13 +40,6 @@ def average_age_overall():
     return int(av_age)
 
 
-def average_age_female():
-    women_ages = []
-    # [(id:1, date:1966-06-26T11:50:25.558Z, age:54, days_until_birth:322), ...
-    for info in session.query(Dob).join(Person).filter(Person.gender == "female").all():
-        women_ages.append(info)
-
-
 def most_common_cities(n):
     cities = session.query(Location.city).all()
     list_cities = list(map(''.join, cities))

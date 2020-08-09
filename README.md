@@ -42,8 +42,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -p {man,women}, --perc {man,women}
                         Specify percent: man or women.
-  -a {man,women,all}, --average_age {man,women,all}
-                        Specify average age: man, women, all.
+  -a, --average_age     Return average age for all.
   -m, --most_safety_password
                         Return most safety password from database.
   -c MOST_COMMON_CITIES, --most_common_cities MOST_COMMON_CITIES
