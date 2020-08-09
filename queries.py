@@ -71,15 +71,23 @@ def most_common_passwords(n):
 
 
 def is_born_in_date_range():
-    start_date = "2016-08-11"
-    end_date = "2020-08-11"
+    start_date = "1988-08-11"
+    end_date = "2010-08-11"
+    obj_start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    obj_end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    # obj_end_date returns <class 'datetime.date'> 2020-08-11
 
     list_tuples_birthday_dates = session.query(Dob.date).all()
     list_bithday_dates = [item for t in list_tuples_birthday_dates for item in t]
-    for date in list_bithday_dates:
-        date = date[0:10]
-        birthday_datetime_obj = datetime.strptime(date, "%Y-%m-%d").date()
-        print(birthday_datetime_obj)
+
+    birthday_persons = []
+
+    for str_date in list_bithday_dates:
+        birthday_datetime_obj = datetime.strptime(str_date, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+
+        if (birthday_datetime_obj > obj_start_date) and (birthday_datetime_obj < obj_end_date):
+            birthday_persons.append(str_date)
+
 
 
 is_born_in_date_range()
