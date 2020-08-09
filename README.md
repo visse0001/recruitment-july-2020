@@ -56,10 +56,15 @@ optional arguments:
 Examples:
 
 `python argp.py -p women`
+
 `python argp.py -perc man`
+
 `python argp.py -a all`
+
 `python argp.py --most_safety_password`
+
 `python argp.py --most_common_cities`
+
 `python argp.py --is_born_in_date_range 1988-11-30 1989-11-30`
 
 
