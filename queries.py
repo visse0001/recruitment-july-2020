@@ -3,6 +3,8 @@ from sqlalchemy import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from datetime import datetime
+
 from base import Person, Dob, Location, Login
 
 engine = create_engine('sqlite:///persons.db', echo=True)
@@ -52,6 +54,7 @@ def most_common_cities(n):
 
     return list_n_cities
 
+
 def most_common_passwords(n):
     passwords = session.query(Login.password).all()
     list_passwords = list(map(''.join, passwords))
@@ -65,3 +68,18 @@ def most_common_passwords(n):
     list_n_passwords = list_elements[0:n]
 
     return list_n_passwords
+
+
+def is_born_in_date_range():
+    start_date = "2016-08-11"
+    end_date = "2020-08-11"
+
+    list_tuples_birthday_dates = session.query(Dob.date).all()
+    list_bithday_dates = [item for t in list_tuples_birthday_dates for item in t]
+    for date in list_bithday_dates:
+        date = date[0:10]
+        birthday_datetime_obj = datetime.strptime(date, "%Y-%m-%d").date()
+        print(birthday_datetime_obj)
+
+
+is_born_in_date_range()
