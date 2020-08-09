@@ -39,15 +39,12 @@ def average_age_overall():
     av_age = sum_age / sum_all()
     return int(av_age)
 
+
 def average_age_female():
     women_ages = []
     # [(id:1, date:1966-06-26T11:50:25.558Z, age:54, days_until_birth:322), ...
-    for info in session.query(Dob).join(Person).filter(Person.gender=="female").all():
+    for info in session.query(Dob).join(Person).filter(Person.gender == "female").all():
         women_ages.append(info)
-
-
-
-average_age_female()
 
 
 def most_common_cities(n):
@@ -123,7 +120,7 @@ def is_born_in_date_range():
     return list_of_tuples_names
 
 
-def count_points_safety_password():
+def most_safety_password():
     # Get all passwords into a list
     passwords = session.query(Login.password).all()
     passwords_list = [item for t in passwords for item in t]
@@ -162,5 +159,6 @@ def count_points_safety_password():
     sorted_by_value = sorted(a_dictionary.items(), key=lambda t: t[1], reverse=True)
 
     return sorted_by_value[0]
+
 
 session.close()
