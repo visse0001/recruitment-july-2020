@@ -1,5 +1,13 @@
 import argparse
-from queries import perc_man, perc_women, average_age_overall, average_age_female, most_common_cities
+from queries import \
+    perc_man, \
+    perc_women, \
+    average_age_overall, \
+    average_age_female, \
+    most_common_cities, \
+    most_safety_password
+
+import sys
 
 
 def positive_int(s: str) -> int:
@@ -22,11 +30,14 @@ parser.add_argument('-p', '--perc',
 
 parser.add_argument('--average_age',
                     choices=['man', 'women', 'all'],
-                    # default='all',
+                    default='all',
                     help='Specify average age: man, women, all. Default: %(all)s.')
 
+parser.add_argument('--most_safety_password',
+                    help='Specify how many common cities.')
+
 parser.add_argument('-c', '--most_common_cities',
-                    nargs=1,
+                    action='store',
                     type=positive_int,
                     help='Specify how many common cities.')
 
@@ -48,3 +59,7 @@ if args.average_age == 'female':
     result = average_age_female()
     print(result)
 
+if args.most_common_cities:
+    n = args.most_common_cities
+    result = most_common_cities(n)
+    print(result)
