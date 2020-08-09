@@ -114,3 +114,45 @@ def is_born_in_date_range():
         list_of_tuples_names.append(query)
     return list_of_tuples_names
 
+def count_points_safety_password():
+
+    # Get all passwords into a list
+    passwords = session.query(Login.password).all()
+    passwords_list = [item for t in passwords for item in t]
+
+    # Get unique passwords
+    unique_passwords = list(set(passwords_list))
+
+
+    def count(a_string: str):
+        points = 0
+        if any(c for c in a_string if c.islower()):
+            points += 1
+
+        if any(c for c in a_string if c.isupper()):
+            points += 2
+
+        if any(c for c in a_string if c.isdigit()):
+            points += 1
+
+        if len(a_string) >= 8:
+            points += 5
+
+        if any(c for c in a_string if c.isalnum()):
+            points += 3
+
+        return points
+    points_list = []
+    for element in unique_passwords:
+        points = count(element)
+        points_list.append(points)
+
+    # Create a dict from two lists
+    zip_iterator = zip(unique_passwords, points_list)
+    a_dictionary = dict(zip_iterator)
+
+
+    return a_dictionary[0]
+
+
+count_points_safety_password()
