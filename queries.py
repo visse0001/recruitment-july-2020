@@ -5,7 +5,9 @@ from sqlalchemy.orm import sessionmaker
 
 from datetime import datetime
 
-from base import Person, Dob, Location, Login
+from collections import defaultdict
+
+from base import Person, Dob, Location, Login, Name
 
 engine = create_engine('sqlite:///persons.db', echo=True)
 
@@ -69,6 +71,9 @@ def most_common_passwords(n):
 
     return list_n_passwords
 
+def convert_tuple_into_dict(tup, di):
+    di = dict(tup)
+    return di
 
 def is_born_in_date_range():
     start_date = "1988-08-11"
@@ -80,13 +85,34 @@ def is_born_in_date_range():
     list_tuples_birthday_dates = session.query(Dob.date).all()
     list_bithday_dates = [item for t in list_tuples_birthday_dates for item in t]
 
+    # Create list of bithdays between two dates
     birthday_persons = []
+
+    ids_list = []
 
     for str_date in list_bithday_dates:
         birthday_datetime_obj = datetime.strptime(str_date, "%Y-%m-%dT%H:%M:%S.%fZ").date()
 
+        # Check if date is between start and end dates and append list
         if (birthday_datetime_obj > obj_start_date) and (birthday_datetime_obj < obj_end_date):
             birthday_persons.append(str_date)
+
+            # Get id number by string date from dates_ids
+
+            dates_ids = session.query(Dob.date, Dob.person_id).all()
+            # result: [('1966-06-26T11:50:25.558Z', 1), ('1949-10-09T00:25:51.304Z', 2),...]
+
+            # covert this list of tuples into dict
+            dates_ids = dict(dates_ids)
+
+            # create list of ids
+            ids_list = [dates_ids[x] for x in birthday_persons if dates_ids.get(x)]
+
+
+
+    print(ids_list)
+
+    # Find Person -> Name.first, Name.last using id numbers
 
 
 
