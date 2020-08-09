@@ -142,6 +142,7 @@ def count_points_safety_password():
             points += 3
 
         return points
+
     points_list = []
     for element in unique_passwords:
         points = count(element)
@@ -151,8 +152,6 @@ def count_points_safety_password():
     zip_iterator = zip(unique_passwords, points_list)
     a_dictionary = dict(zip_iterator)
 
+    sorted_by_value = sorted(a_dictionary.items(), key = lambda t: t[1], reverse=True)
 
-    return a_dictionary[0]
-
-
-count_points_safety_password()
+    return sorted_by_value[0]
