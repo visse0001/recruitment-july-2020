@@ -71,9 +71,11 @@ def most_common_passwords(n):
 
     return list_n_passwords
 
+
 def convert_tuple_into_dict(tup, di):
     di = dict(tup)
     return di
+
 
 def is_born_in_date_range():
     start_date = "1988-08-11"
@@ -97,23 +99,20 @@ def is_born_in_date_range():
         if (birthday_datetime_obj > obj_start_date) and (birthday_datetime_obj < obj_end_date):
             birthday_persons.append(str_date)
 
-            # Get id number by string date from dates_ids
-
+            # Get dates and id numbers
             dates_ids = session.query(Dob.date, Dob.person_id).all()
-            # result: [('1966-06-26T11:50:25.558Z', 1), ('1949-10-09T00:25:51.304Z', 2),...]
 
-            # covert this list of tuples into dict
+            # Covert this list of tuples into a dict
             dates_ids = dict(dates_ids)
 
-            # create list of ids
+            # Create list of ids
             ids_list = [dates_ids[x] for x in birthday_persons if dates_ids.get(x)]
 
-
-
+    # Find persons names by id
     print(ids_list)
+    list_of_tuples_names = []
+    for i in ids_list:
+        query = session.query(Name).get(i)
+        list_of_tuples_names.append(query)
+    return list_of_tuples_names
 
-    # Find Person -> Name.first, Name.last using id numbers
-
-
-
-is_born_in_date_range()
