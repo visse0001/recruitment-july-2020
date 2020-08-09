@@ -77,9 +77,9 @@ def most_common_passwords(n):
     return list_n_passwords
 
 
-def is_born_in_date_range():
-    start_date = "1988-08-11"
-    end_date = "2010-08-11"
+def is_born_in_date_range(start_date: str, end_date: str):
+    start_date = start_date
+    end_date = end_date
     obj_start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
     obj_end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
 
