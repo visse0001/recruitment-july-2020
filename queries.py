@@ -7,7 +7,7 @@ from datetime import datetime
 
 from base import Person, Dob, Location, Login, Name
 
-engine = create_engine('sqlite:///persons.db', echo=True)
+engine = create_engine('sqlite:///persons.db', echo=False)
 
 Base = declarative_base()
 
@@ -37,7 +37,17 @@ def perc_man():
 def average_age_overall():
     sum_age = session.query(func.sum(Dob.age)).scalar()
     av_age = sum_age / sum_all()
-    return av_age
+    return int(av_age)
+
+def average_age_female():
+    women_ages = []
+    # [(id:1, date:1966-06-26T11:50:25.558Z, age:54, days_until_birth:322), ...
+    for info in session.query(Dob).join(Person).filter(Person.gender=="female").all():
+        women_ages.append(info)
+
+
+
+average_age_female()
 
 
 def most_common_cities(n):
@@ -153,3 +163,4 @@ def count_points_safety_password():
 
     return sorted_by_value[0]
 
+session.close()
