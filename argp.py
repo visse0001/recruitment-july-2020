@@ -5,9 +5,8 @@ from queries import \
     average_age_overall, \
     average_age_female, \
     most_common_cities, \
-    most_safety_password
-
-import sys
+    most_safety_password, \
+    is_born_in_date_range
 
 
 def positive_int(s: str) -> int:
@@ -25,21 +24,25 @@ def positive_int(s: str) -> int:
 parser = argparse.ArgumentParser(description='A script that does operations with database data and returns values')
 parser.add_argument('-p', '--perc',
                     choices=['man', 'women'],
-                    default='man',
                     help='Specify percent: man or women. Default: %(man)s.')
 
 parser.add_argument('--average_age',
                     choices=['man', 'women', 'all'],
-                    default='all',
-                    help='Specify average age: man, women, all. Default: %(all)s.')
+                    help='Specify average age: man, women, all.')
 
 parser.add_argument('--most_safety_password',
-                    help='Specify how many common cities.')
+                    action='store_true',
+                    help='Return most safety password from database.')
 
 parser.add_argument('-c', '--most_common_cities',
-                    action='store',
                     type=positive_int,
                     help='Specify how many common cities.')
+
+parser.add_argument('-b', '--is_born_in_date_range',
+                    type=str,
+                    nargs='+',
+                    help='Specify two dates in format YYYY-MM-DD YYYY-MM-DD. '
+                         'Return persons ids, titles, firstnames and lastnames.')
 
 args = parser.parse_args()
 
@@ -62,4 +65,12 @@ if args.average_age == 'female':
 if args.most_common_cities:
     n = args.most_common_cities
     result = most_common_cities(n)
+    print(result)
+
+if args.most_safety_password:
+    result = most_safety_password()
+    print(result)
+
+if args.is_born_in_date_range:
+    result = is_born_in_date_range(args.is_born_in_date_range[0], args.is_born_in_date_range[1])
     print(result)
