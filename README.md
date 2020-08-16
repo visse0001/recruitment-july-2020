@@ -8,13 +8,13 @@ Contains functions that modify data in the database. The script can be used via 
 
 ### Virtual Enviroment
 Create a virtual environment: <br/>
-`python3.7 -m venv env`
+`python3.8 -m venv venv`
 
 To activate a venv: <br/>
-`source env/bin/activate`
+`source venv/bin/activate`
 
 ## Dependencies
-[Python 3.7](https://www.python.org/downloads/) <br>
+[Python 3.8](https://www.python.org/downloads/) <br>
 [pip](https://pip.pypa.io/en/stable/installing/) <br>
 [SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
 
