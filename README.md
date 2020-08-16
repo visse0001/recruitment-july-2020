@@ -63,7 +63,7 @@ Examples:
 
 `python argp.py --most_safety_password`
 
-`python argp.py --most_common_cities`
+`python argp.py --most_common_cities 5`
 
 `python argp.py --is_born_in_date_range 1988-11-30 1989-11-30`
 
