@@ -4,11 +4,10 @@ from datetime import datetime
 JSON_NAME = "persons.json"
 
 
-def get_json_dict():
-    json_file = open(JSON_NAME, 'r')
-    json_data = json_file.read()
-    obj = json.loads(json_data)
-    return obj
+def get_json_dict(JSON_NAME):
+    with open(JSON_NAME) as f:
+        json_content = json.load(f)
+    return json_content
 
 
 def get_not_nested_table_data(index: int, table_name: str):
