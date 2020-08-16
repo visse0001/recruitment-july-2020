@@ -57,7 +57,7 @@ Examples:
 
 `python argp.py -p women`
 
-`python argp.py -perc man`
+`python argp.py --perc man`
 
 `python argp.py -a all`
 
