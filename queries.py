@@ -40,6 +40,12 @@ def average_age_overall():
     return int(av_age)
 
 
+def average_age_female():
+    sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender='female').scalar()
+    av_age = sum_age / sum_all()
+    return int(av_age)
+
+
 def most_common_cities(n):
     cities = session.query(Location.city).all()
     list_cities = list(map(''.join, cities))
