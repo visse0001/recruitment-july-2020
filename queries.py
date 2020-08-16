@@ -40,8 +40,8 @@ def average_age_overall():
     return int(av_age)
 
 
-def average_age_female():
-    sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender='female').scalar()
+def average_age_female_or_man(gender):
+    sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender=f'{gender}').scalar()
     av_age = sum_age / sum_all()
     return int(av_age)
 
