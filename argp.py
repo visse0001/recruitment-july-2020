@@ -5,7 +5,8 @@ from queries import \
     average_age_overall, \
     most_common_cities, \
     most_safety_password, \
-    is_born_in_date_range
+    is_born_in_date_range, \
+    average_age_female
 
 
 def positive_int(s: str) -> int:
@@ -26,7 +27,7 @@ parser.add_argument('-p', '--perc',
                     help='Specify percent: man or women.')
 
 parser.add_argument('-a', '--average_age',
-                    action='store_true',
+                    choices=['all', 'women'],
                     help='Return average age for all.')
 
 parser.add_argument('-m', '--most_safety_password',
@@ -53,11 +54,11 @@ if args.perc == 'women':
     result = perc_women()
     print(f"The percentage of women in the base {result}%")
 
-if args.average_age:
+if args.average_age == 'all':
     result = average_age_overall()
     print(f"The average age overall {result}.")
 
-if args.average_age == 'female':
+if args.average_age == 'women':
     result = average_age_female()
     print(f"The average age women {result}.")
 
