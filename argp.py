@@ -60,11 +60,11 @@ if args.average_age == 'all':
 
 if args.average_age == 'women':
     result = average_age_female_or_man('female')
-    print(f"The average age {args.average_age}: {result}.")
+    print(f"The average age of {args.average_age} is {result}.")
 
 if args.average_age == 'man':
     result = average_age_female_or_man('male')
-    print(f"The average age {args.average_age} {result}.")
+    print(f"The average age of {args.average_age} is {result}.")
 
 if args.most_common_cities:
     n = args.most_common_cities
