@@ -42,15 +42,14 @@ optional arguments:
   -h, --help            show this help message and exit
   -p {man,women}, --perc {man,women}
                         Specify percent: man or women.
-  -a, --average_age     Return average age for all.
+  -a {all,women,man}, --average_age {all,women,man}
+                        Return average age for all.
   -m, --most_safety_password
                         Return most safety password from database.
   -c MOST_COMMON_CITIES, --most_common_cities MOST_COMMON_CITIES
                         Specify number how many common cities need to return.
   -b IS_BORN_IN_DATE_RANGE [IS_BORN_IN_DATE_RANGE ...], --is_born_in_date_range IS_BORN_IN_DATE_RANGE [IS_BORN_IN_DATE_RANGE ...]
-                        Specify two dates in format YYYY-MM-DD YYYY-MM-DD.
-                        Return persons ids, titles, firstnames and lastnames.
-
+                        Specify two dates in format YYYY-MM-DD YYYY-MM-DD. Return persons ids, titles, firstnames and lastnames.
 ```
 
 Examples:
@@ -60,6 +59,10 @@ Examples:
 `python argp.py --perc man`
 
 `python argp.py -a all`
+
+`python argp.py --average_age man`
+
+`python argp.py --average_age women`
 
 `python argp.py --most_safety_password`
 
