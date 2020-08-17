@@ -50,11 +50,10 @@ def most_common_cities(n):
     cities = session.query(Location.city).all()
     list_cities = list(map(''.join, cities))
     count_cities_dict = {i: list_cities.count(i) for i in list_cities}
-    sorted_dict = {k: v for k, v in sorted(count_cities_dict.items(), key=lambda x: x[1])}
-    sort_cities = sorted(sorted_dict.items(), key=lambda x: x[1], reverse=True)
+    sorted_dict = {k: v for k, v in sorted(count_cities_dict.items(), key=lambda x: x[1], reverse=True)}
 
     for i in range(n):
-        list_elements = [a_tuple for a_tuple in sort_cities]
+        list_elements = [a_tuple for a_tuple in sorted_dict]
 
     list_n_cities = list_elements[0:n]
 
@@ -65,11 +64,10 @@ def most_common_passwords(n):
     passwords = session.query(Login.password).all()
     list_passwords = list(map(''.join, passwords))
     count_passwords_dict = {i: list_passwords.count(i) for i in list_passwords}
-    sorted_dict = {k: v for k, v in sorted(count_passwords_dict.items(), key=lambda x: x[1])}
-    list_by_value = sorted(sorted_dict.items(), key=lambda x: x[1], reverse=True)
+    sorted_dict = {k: v for k, v in sorted(count_passwords_dict.items(), key=lambda x: x[1], reverse=True)}
 
     for i in range(n):
-        list_elements = [a_tuple for a_tuple in list_by_value]
+        list_elements = [a_tuple for a_tuple in sorted_dict]
 
     list_n_passwords = list_elements[0:n]
 
