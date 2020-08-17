@@ -65,8 +65,8 @@ def get_days_until_birthday(index: int, dob: str, date: str):
         # change day 29 to 28. Then add 1 day to delta.days
         new_birthday = obj_birthday_with_current_year.replace(day=28)
 
-        # delta
         delta = new_birthday - now
+        # Add missing 1 day to delta result
         delta_days = delta.days + 1
 
         # bithday was in this year. Need to use next year
