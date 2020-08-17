@@ -4,7 +4,7 @@ from datetime import datetime
 JSON_NAME = "persons.json"
 
 
-def get_json_dict(JSON_NAME):
+def get_json_dict():
     with open(JSON_NAME) as f:
         json_content = json.load(f)
     return json_content
