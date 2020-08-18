@@ -40,9 +40,16 @@ def average_age_overall():
     return int(av_age)
 
 
-def average_age_female_or_man(gender):
+def average_age_female_or_man(gender: str):
     sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender=f'{gender}').scalar()
-    av_age = sum_age / sum_all()
+    if gender == "female":
+        query = session.query(Person).filter_by(gender='female').count()
+        av_age = sum_age / query
+
+    if gender == "male":
+        query = session.query(Person).filter_by(gender='male').count()
+        av_age = sum_age / query
+
     return int(av_age)
 
 
@@ -60,7 +67,7 @@ def most_common_cities(n):
     return list_n_cities
 
 
-def most_common_passwords(n):
+def most_common_passwords(n: int):
     passwords = session.query(Login.password).all()
     list_passwords = list(map(''.join, passwords))
     count_passwords_dict = {i: list_passwords.count(i) for i in list_passwords}
