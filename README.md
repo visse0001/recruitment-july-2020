@@ -8,13 +8,13 @@ Contains functions that modify data in the database. The script can be used via 
 
 ### Virtual Enviroment
 Create a virtual environment: <br/>
-`python3.7 -m venv env`
+`python3.8 -m venv venv`
 
 To activate a venv: <br/>
-`source env/bin/activate`
+`source venv/bin/activate`
 
 ## Dependencies
-[Python 3.7](https://www.python.org/downloads/) <br>
+[Python 3.8](https://www.python.org/downloads/) <br>
 [pip](https://pip.pypa.io/en/stable/installing/) <br>
 [SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
 
@@ -42,28 +42,31 @@ optional arguments:
   -h, --help            show this help message and exit
   -p {man,women}, --perc {man,women}
                         Specify percent: man or women.
-  -a, --average_age     Return average age for all.
+  -a {all,women,man}, --average_age {all,women,man}
+                        Return average age for all.
   -m, --most_safety_password
                         Return most safety password from database.
   -c MOST_COMMON_CITIES, --most_common_cities MOST_COMMON_CITIES
                         Specify number how many common cities need to return.
   -b IS_BORN_IN_DATE_RANGE [IS_BORN_IN_DATE_RANGE ...], --is_born_in_date_range IS_BORN_IN_DATE_RANGE [IS_BORN_IN_DATE_RANGE ...]
-                        Specify two dates in format YYYY-MM-DD YYYY-MM-DD.
-                        Return persons ids, titles, firstnames and lastnames.
-
+                        Specify two dates in format YYYY-MM-DD YYYY-MM-DD. Return persons ids, titles, firstnames and lastnames.
 ```
 
 Examples:
 
 `python argp.py -p women`
 
-`python argp.py -perc man`
+`python argp.py --perc man`
 
 `python argp.py -a all`
 
+`python argp.py --average_age man`
+
+`python argp.py --average_age women`
+
 `python argp.py --most_safety_password`
 
-`python argp.py --most_common_cities`
+`python argp.py --most_common_cities 5`
 
 `python argp.py --is_born_in_date_range 1988-11-30 1989-11-30`
 

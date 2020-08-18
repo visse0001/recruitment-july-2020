@@ -5,10 +5,9 @@ JSON_NAME = "persons.json"
 
 
 def get_json_dict():
-    json_file = open(JSON_NAME, 'r')
-    json_data = json_file.read()
-    obj = json.loads(json_data)
-    return obj
+    with open(JSON_NAME) as f:
+        json_content = json.load(f)
+    return json_content
 
 
 def get_not_nested_table_data(index: int, table_name: str):
@@ -66,8 +65,8 @@ def get_days_until_birthday(index: int, dob: str, date: str):
         # change day 29 to 28. Then add 1 day to delta.days
         new_birthday = obj_birthday_with_current_year.replace(day=28)
 
-        # delta
         delta = new_birthday - now
+        # Add missing 1 day to delta result
         delta_days = delta.days + 1
 
         # bithday was in this year. Need to use next year
