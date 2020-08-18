@@ -30,6 +30,7 @@ parser.add_argument('-a', '--average_age',
                     choices=['all', 'women', 'man'],
                     help='Return average age for all.')
 
+
 parser.add_argument('-m', '--most_safety_password',
                     action='store_true',
                     help='Return most safety password from database.')
