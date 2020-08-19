@@ -13,6 +13,3 @@ def get_data_from_api():
         print(f'Other error occurred: {err}')
 
     return json_response
-
-records = get_data_from_api()
-print(records)
