@@ -1,30 +1,22 @@
-import json
 from datetime import datetime
 
-JSON_NAME = "persons.json"
+from api import get_data_from_api
 
-
-def get_json_dict():
-    with open(JSON_NAME) as f:
-        json_content = json.load(f)
-    return json_content
+data = get_data_from_api()
 
 
 def get_not_nested_table_data(index: int, table_name: str):
-    result = get_json_dict()
-    obj = result['results'][index][table_name]
+    obj = data['results'][index][table_name]
     return obj
 
 
 def get_double_nested_table_data(index: int, first_table: str, second_table: str):
-    result = get_json_dict()
-    obj = result['results'][index][first_table][second_table]
+    obj = data['results'][index][first_table][second_table]
     return obj
 
 
 def get_triple_nested_table_data(index: int, first_table: str, second_table: str, third_table: str):
-    result = get_json_dict()
-    obj = result['results'][index][first_table][second_table][third_table]
+    obj = data['results'][index][first_table][second_table][third_table]
     return obj
 
 
@@ -42,8 +34,7 @@ def get_datetime_obj_from_str(a_string):
 
 
 def count_persons():
-    result = get_json_dict()
-    obj = result['results']
+    obj = data['results']
     return len(obj)
 
 
