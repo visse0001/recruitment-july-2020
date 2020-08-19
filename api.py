@@ -4,7 +4,7 @@ from requests.exceptions import HTTPError
 
 def get_data_from_api():
     try:
-        response = requests.get('https://randomuser.me/api/')
+        response = requests.get('https://randomuser.me/api/?results=1000')
         response.raise_for_status()
         json_response = response.json()
     except HTTPError as http_err:
@@ -15,12 +15,4 @@ def get_data_from_api():
     return json_response
 
 records = get_data_from_api()
-
-for record in range(10):
-    one_record = get_data_from_api()
-    one_record = one_record["results"]
-    for key, value in records.items():
-        if key == "results":
-            value += one_record
-
 print(records)
