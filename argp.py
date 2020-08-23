@@ -1,4 +1,6 @@
 import argparse
+
+from db_conn import get_session
 from queries import \
     perc_man, \
     perc_women, \
@@ -30,7 +32,6 @@ parser.add_argument('-a', '--average_age',
                     choices=['all', 'women', 'man'],
                     help='Return average age for all.')
 
-
 parser.add_argument('-m', '--most_safety_password',
                     action='store_true',
                     help='Return most safety password from database.')
@@ -47,35 +48,41 @@ parser.add_argument('-b', '--is_born_in_date_range',
 
 args = parser.parse_args()
 
+session = get_session()
+
 if args.perc == 'man':
-    result = perc_man()
+    result = perc_man(session)
     print(f"The percentage of men in the base {result}%")
 
 if args.perc == 'women':
-    result = perc_women()
+    result = perc_women(session)
     print(f"The percentage of women in the base {result}%")
 
 if args.average_age == 'all':
-    result = average_age_overall()
+    result = average_age_overall(session)
     print(f"The average age overall: {result}.")
 
 if args.average_age == 'women':
-    result = average_age_female_or_man('female')
+    result = average_age_female_or_man('female', session)
     print(f"The average age of {args.average_age} is {result}.")
 
 if args.average_age == 'man':
-    result = average_age_female_or_man('male')
+    result = average_age_female_or_man('male', session)
     print(f"The average age of {args.average_age} is {result}.")
 
 if args.most_common_cities:
     n = args.most_common_cities
-    result = most_common_cities(n)
+    result = most_common_cities(n, session)
     print(f"Most common cities are: {result}")
 
 if args.most_safety_password:
-    result = most_safety_password()
+    result = most_safety_password(session)
     print(f"Most safe password and sum of points from database are for example: {result}")
 
 if args.is_born_in_date_range:
-    result = is_born_in_date_range(args.is_born_in_date_range[0], args.is_born_in_date_range[1])
+    first_date = args.is_born_in_date_range[0]
+    second_date = args.is_born_in_date_range[1]
+    result = is_born_in_date_range(first_date, second_date, session)
     print(f"People that was born between dates are: {result}")
+
+session.close()
