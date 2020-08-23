@@ -6,53 +6,32 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 
 from base import Person, Dob, Location, Login, Name
-
-engine = create_engine('sqlite:///persons.db', echo=False)
-
-Base = declarative_base()
-
-Session = sessionmaker(bind=engine)
-Session = sessionmaker()
-Session.configure(bind=engine)
+from db_conn import get_session
 
 
-def dbconnect(func):
-    def inner(*args, **kwargs):
-        session = Session()
-        func(*args, session=session, **kwargs)
-        session.close()
-
-    return inner
-
-
-@dbconnect
 def sum_all(session):
     sum_all = session.query(Person).count()
     return sum_all
 
 
-@dbconnect
 def perc_women(session):
     sum_women = session.query(Person).filter_by(gender='female').count()
-    perc_women = (sum_women * 100) / sum_all()
+    perc_women = (sum_women * 100) / sum_all(session)
     return perc_women
 
 
-@dbconnect
 def perc_man(session):
     sum_men = session.query(Person).filter_by(gender='male').count()
-    perc_men = (sum_men * 100) / sum_all()
+    perc_men = (sum_men * 100) / sum_all(session)
     return perc_men
 
 
-@dbconnect
 def average_age_overall(session):
     sum_age = session.query(func.sum(Dob.age)).scalar()
-    av_age = sum_age / sum_all()
+    av_age = sum_age / sum_all(session)
     return int(av_age)
 
 
-@dbconnect
 def average_age_female_or_man(gender: str, session):
     sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender=f'{gender}').scalar()
     if gender == "female":
@@ -66,7 +45,6 @@ def average_age_female_or_man(gender: str, session):
     return int(av_age)
 
 
-@dbconnect
 def most_common_cities(n, session):
     cities = session.query(Location.city).all()
     list_cities = list(map(''.join, cities))
@@ -81,7 +59,6 @@ def most_common_cities(n, session):
     return list_n_cities
 
 
-@dbconnect
 def most_common_passwords(n: int, session):
     passwords = session.query(Login.password).all()
     list_passwords = list(map(''.join, passwords))
@@ -96,7 +73,6 @@ def most_common_passwords(n: int, session):
     return list_n_passwords
 
 
-@dbconnect
 def is_born_in_date_range(start_date: str, end_date: str, session):
     start_date = start_date
     end_date = end_date
@@ -135,7 +111,6 @@ def is_born_in_date_range(start_date: str, end_date: str, session):
     return list_of_tuples_names
 
 
-@dbconnect
 def most_safety_password(session):
     # Get all passwords into a list
     passwords = session.query(Login.password).all()
