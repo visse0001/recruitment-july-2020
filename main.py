@@ -1,7 +1,7 @@
 import argparse
 
 from db_conn import get_session
-from queries import \
+from queries_to_db import \
     perc_man, \
     perc_women, \
     average_age_overall, \
@@ -80,9 +80,9 @@ if args.most_safety_password:
     print(f"Most safe password and sum of points from database are for example: {result}")
 
 if args.is_born_in_date_range:
-    first_date = args.is_born_in_date_range[0]
-    second_date = args.is_born_in_date_range[1]
-    result = is_born_in_date_range(first_date, second_date, session)
+    from_date = args.is_born_in_date_range[0]
+    to_date = args.is_born_in_date_range[1]
+    result = is_born_in_date_range(from_date, to_date, session)
     print(f"People that was born between dates are: {result}")
 
 session.close()
