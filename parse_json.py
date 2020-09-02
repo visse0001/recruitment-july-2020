@@ -5,7 +5,7 @@ JSON_NAME = "persons.json"
 
 
 def get_json_dict():
-    with open(JSON_NAME) as f:
+    with open(JSON_NAME, encoding='utf-8') as f:
         json_content = json.load(f)
     return json_content
 
