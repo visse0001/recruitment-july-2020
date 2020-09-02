@@ -1,7 +1,7 @@
 import argparse
 
 from db_conn import get_session
-from queries_to_db import \
+from argparse_queries_to_db import \
     perc_man, \
     perc_women, \
     average_age_overall, \
