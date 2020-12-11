@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from api import get_data_from_api
 
@@ -29,7 +29,7 @@ def remove_special_characters_from_string(a_string: str):
 
 
 def get_datetime_obj_from_str(a_string):
-    date_obj = datetime.strptime(a_string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    date_obj = datetime.datetime.strptime(a_string, "%Y-%m-%dT%H:%M:%S.%fZ")
     return date_obj
 
 
@@ -38,5 +38,14 @@ def count_persons():
     return len(obj)
 
 
-def get_days_until_birthday(index: int, dob: str, date: str):
-    pass
+def get_days_until_birthday(index: int, dob: str, bday: str):
+    today = datetime.datetime.today()
+    birthday = get_double_nested_table_data(index, dob, bday)
+    birthday = datetime.datetime.strptime(birthday, "%Y-%m-%dT%H:%M:%S.%fZ")
+    birthday.replace(year=today.year)
+    if birthday < today:
+        birthday = birthday.replace(year=today.year + 1)
+    days_to_birthday = abs(birthday - today)
+    return days_to_birthday.days
+
+
