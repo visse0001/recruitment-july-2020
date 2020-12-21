@@ -1,14 +1,36 @@
+import json
+
 import requests
 from requests.exceptions import HTTPError
 
 
-def get_data_from_api():
-    try:
-        response = requests.get('https://randomuser.me/api/?results=1000')
-        response.raise_for_status()
-        json_response = response.json()
-        return json_response
-    except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
-    except Exception as err:
-        print(f'Other error occurred: {err}')
+class DataAPI:
+    def __init__(self, num_results):
+        self.num_results = num_results
+        self.response = self.get_api_data()
+
+    def _get_url(self):
+        url = f'https://randomuser.me/api/?results={self.num_results}'
+        return url
+
+    def get_api_data(self):
+        try:
+            url = self._get_url()
+            response = requests.get(url=url)
+            response.raise_for_status()
+            json_response = response.json()
+            return json_response
+        except HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
+
+    def create_json(self):
+        with open('persons_api.json', 'w') as write_file:
+            json.dump(self.response, write_file, indent=4)
+
+
+
+
+# data = DataAPI(num_results=50)
+# print(data.response)
