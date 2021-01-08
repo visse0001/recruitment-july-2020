@@ -163,7 +163,6 @@ if __name__ == '__main__':
 
     session = Session()
 
-    # count_of_persons = count_persons()
     data_api = DataAPI(num_results=1000)
     data_api_response = data_api.response
     parse_data = ParseData(data=data_api_response)
