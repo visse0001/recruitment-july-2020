@@ -17,7 +17,6 @@ class DataAPI:
         try:
             url = self._get_url()
             response = requests.get(url=url)
-            response.raise_for_status()
             json_response = response.json()
             return json_response
         except HTTPError as http_err:
