@@ -4,6 +4,16 @@ import requests
 from requests.exceptions import HTTPError
 
 
+class DataFile:
+    def __init__(self, file_name):
+        self.file = self.set_data(file_name)
+
+    def set_data(self, file_name):
+        with open(file_name, encoding='utf-8') as f:
+            json_content = json.load(f)
+        return json_content
+
+
 class DataAPI:
     def __init__(self, num_results):
         self.num_results = num_results
@@ -27,9 +37,6 @@ class DataAPI:
     def create_json(self):
         with open('persons_api.json', 'w') as write_file:
             json.dump(self.response, write_file, indent=4)
-
-
-
 
 # data = DataAPI(num_results=50)
 # print(data.response)

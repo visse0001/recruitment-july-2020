@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from api import DataAPI
+from data import DataAPI, DataFile
 from parse_json import ParseData
 from utils import remove_special_char
 
@@ -14,9 +14,16 @@ if __name__ == '__main__':
 
     session = Session()
 
-    data_api = DataAPI(num_results=1000)
-    data_api_response = data_api.response
+    # Set Data From API
+    data = DataAPI(num_results=1000)
+    data_api_response = data.response
     parse_data = ParseData(data=data_api_response)
+
+    # Set Data From Json
+    # data = DataFile(file_name='persons.json')
+    # data = data.file
+    # parse_data = ParseData(data=data)
+
     persons_sum = parse_data.get_sum_persons()
     for index in range(persons_sum):
         person = Person(gender=parse_data.get_not_nested_table_data(index, "gender"),
