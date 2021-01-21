@@ -18,6 +18,9 @@ To activate a venv: <br/>
 [pip](https://pip.pypa.io/en/stable/installing/) <br>
 [SQLAlchemy](https://docs.sqlalchemy.org/en/13/intro.html)
 
+To upgrade existing pip: <br>
+`pip install --upgrade pip`
+
 To install dependencies from requirements.txt: <br>
 `pip install -r requirements.txt`
 
@@ -27,11 +30,11 @@ Create a database and populate a database by parsing JSON file.
 
 Use command below and wait for a while:
 
-`python base.py`
+`python populate_db.py`
  
  Now you may use command below:
  
- `python argp.py --help`
+`python argp.py --help`
  
  It will return:
  

@@ -1,46 +1,35 @@
-from sqlalchemy import create_engine
-from sqlalchemy import func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
 from datetime import datetime
 
-from base import Person, Dob, Location, Login, Name
+from sqlalchemy import func
 
-engine = create_engine('sqlite:///persons.db', echo=False)
-
-Base = declarative_base()
-
-Session = sessionmaker(bind=engine)
-Session = sessionmaker()
-Session.configure(bind=engine)
-session = Session()
+from populate_db import Person, Dob, Location, Login, Name
+from db_conn import get_session
 
 
-def sum_all():
+def sum_all(session):
     sum_all = session.query(Person).count()
     return sum_all
 
 
-def perc_women():
+def perc_women(session):
     sum_women = session.query(Person).filter_by(gender='female').count()
-    perc_women = (sum_women * 100) / sum_all()
+    perc_women = (sum_women * 100) / sum_all(session)
     return perc_women
 
 
-def perc_man():
+def perc_man(session):
     sum_men = session.query(Person).filter_by(gender='male').count()
-    perc_men = (sum_men * 100) / sum_all()
+    perc_men = (sum_men * 100) / sum_all(session)
     return perc_men
 
 
-def average_age_overall():
+def average_age_overall(session):
     sum_age = session.query(func.sum(Dob.age)).scalar()
-    av_age = sum_age / sum_all()
+    av_age = sum_age / sum_all(session)
     return int(av_age)
 
 
-def average_age_female_or_man(gender: str):
+def average_age_female_or_man(gender: str, session):
     sum_age = session.query(func.sum(Dob.age)).join(Person).filter_by(gender=f'{gender}').scalar()
     if gender == "female":
         query = session.query(Person).filter_by(gender='female').count()
@@ -53,7 +42,7 @@ def average_age_female_or_man(gender: str):
     return int(av_age)
 
 
-def most_common_cities(n):
+def most_common_cities(n, session):
     cities = session.query(Location.city).all()
     list_cities = list(map(''.join, cities))
     count_cities_dict = {i: list_cities.count(i) for i in list_cities}
@@ -67,7 +56,7 @@ def most_common_cities(n):
     return list_n_cities
 
 
-def most_common_passwords(n: int):
+def most_common_passwords(n: int, session):
     passwords = session.query(Login.password).all()
     list_passwords = list(map(''.join, passwords))
     count_passwords_dict = {i: list_passwords.count(i) for i in list_passwords}
@@ -81,16 +70,15 @@ def most_common_passwords(n: int):
     return list_n_passwords
 
 
-def is_born_in_date_range(start_date: str, end_date: str):
-    start_date = start_date
-    end_date = end_date
-    obj_start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-    obj_end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+def is_born_in_date_range(from_date: str, to_date: str, session):
+    from_date = from_date
+    to_date = to_date
+    from_date = datetime.strptime(from_date, "%Y-%m-%d").date()
+    to_date = datetime.strptime(to_date, "%Y-%m-%d").date()
 
     list_tuples_birthday_dates = session.query(Dob.date).all()
     list_bithday_dates = [item for t in list_tuples_birthday_dates for item in t]
 
-    # Create list of bithdays between two dates
     birthday_persons = []
 
     ids_list = []
@@ -99,7 +87,7 @@ def is_born_in_date_range(start_date: str, end_date: str):
         birthday_datetime_obj = datetime.strptime(str_date, "%Y-%m-%dT%H:%M:%S.%fZ").date()
 
         # Check if date is between start and end dates and append list
-        if (birthday_datetime_obj > obj_start_date) and (birthday_datetime_obj < obj_end_date):
+        if (birthday_datetime_obj > from_date) and (birthday_datetime_obj < to_date):
             birthday_persons.append(str_date)
 
             # Get dates and id numbers
@@ -119,7 +107,7 @@ def is_born_in_date_range(start_date: str, end_date: str):
     return list_of_tuples_names
 
 
-def most_safety_password():
+def most_safety_password(session):
     # Get all passwords into a list
     passwords = session.query(Login.password).all()
     passwords_list = [item for t in passwords for item in t]
@@ -159,5 +147,3 @@ def most_safety_password():
 
     return sorted_by_value[0]
 
-
-session.close()
