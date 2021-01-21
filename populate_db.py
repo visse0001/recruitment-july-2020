@@ -176,7 +176,6 @@ if __name__ == '__main__':
                         )
 
         session.add(person)
-        session.commit()
 
         name = Name(title=parse_data.get_double_nested_table_data(index, "name", "title"),
                     first=parse_data.get_double_nested_table_data(index, "name", "first"),
@@ -185,7 +184,6 @@ if __name__ == '__main__':
                     )
 
         session.add(name)
-        session.commit()
 
         location = Location(city=parse_data.get_double_nested_table_data(index, "location", "city"),
                             state=parse_data.get_double_nested_table_data(index, "location", "state"),
@@ -195,7 +193,6 @@ if __name__ == '__main__':
                             )
 
         session.add(location)
-        session.commit()
 
         street = Street(location_id=location.id,
                         number=parse_data.get_triple_nested_table_data(index, "location", "street", "number"),
@@ -203,7 +200,6 @@ if __name__ == '__main__':
                         )
 
         session.add(street)
-        session.commit()
 
         coordinates = Coordinates(location_id=location.id,
                                   latitude=parse_data.get_triple_nested_table_data(index, "location", "coordinates",
@@ -212,7 +208,6 @@ if __name__ == '__main__':
                                                                                     "longitude"),
                                   )
         session.add(coordinates)
-        session.commit()
 
         timezone = Timezone(location_id=location.id,
                             offset=parse_data.get_triple_nested_table_data(index, "location", "timezone", "offset"),
@@ -221,7 +216,6 @@ if __name__ == '__main__':
                             )
 
         session.add(timezone)
-        session.commit()
 
         login = Login(person_id=person.id,
                       uuid=parse_data.get_double_nested_table_data(index, "login", "uuid"),
@@ -234,7 +228,6 @@ if __name__ == '__main__':
                       )
 
         session.add(login)
-        session.commit()
 
         dob = Dob(person_id=person.id,
                   date=parse_data.get_double_nested_table_data(index, "dob", "date"),
@@ -243,7 +236,6 @@ if __name__ == '__main__':
                   )
 
         session.add(dob)
-        session.commit()
 
         id_person = IdPerson(person_id=person.id,
                              name=parse_data.get_double_nested_table_data(index, "id", "name"),
